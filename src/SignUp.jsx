@@ -1,8 +1,20 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { User, Mail, Lock, Briefcase, Palette } from "lucide-react"
 
 export default function SignUp() {
   const [role, setRole] = useState("designer")
+  const navigate = useNavigate()
+
+  const handleSignUp = () => {
+    // هنا بعد ما تعمل validation أو API
+
+    if (role === "vendor") {
+      navigate("/products")
+    } else {
+      navigate("/dashboard") // غيرها لو عندك صفحة تانية
+    }
+  }
 
   return (
     <div className="min-h-screen flex bg-[#f5f1ec]">
@@ -17,7 +29,6 @@ export default function SignUp() {
           backgroundPosition: "center",
         }}
       >
-        {/* Overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -28,7 +39,6 @@ export default function SignUp() {
 
         <div className="relative z-20 p-12 flex flex-col justify-between w-full">
 
-          {/* Logo */}
           <a href="/" className="flex items-center gap-3 cursor-pointer">
             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
               ✦
@@ -166,7 +176,11 @@ export default function SignUp() {
             </p>
           </div>
 
-          <button className="w-full mt-8 bg-[#d97757] text-white py-4 rounded-full font-semibold text-lg shadow-lg hover:opacity-90 transition">
+          {/* 🔥 هنا التعديل */}
+          <button
+            onClick={handleSignUp}
+            className="w-full mt-8 bg-[#d97757] text-white py-4 rounded-full font-semibold text-lg shadow-lg hover:opacity-90 transition"
+          >
             Create Account →
           </button>
 

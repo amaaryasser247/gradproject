@@ -1,10 +1,16 @@
 import { Mail, Lock } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
+export default function Login() {
 
-export default function Login()
- {
-    
+  const navigate = useNavigate()
+
+  // 🔥 LOGIN FUNCTION
+ const handleLogin = () => {
+  localStorage.setItem("token", "123")
+  navigate("/vendor/products", { replace: true })
+}
+
   return (
     <div className="min-h-screen flex bg-[#f5f1ec]">
 
@@ -26,13 +32,14 @@ export default function Login()
           }}
         />
 
-            <div className="relative z-20 p-12 flex flex-col justify-between w-full">
-  <a href="/" className="flex items-center gap-3 cursor-pointer">
-  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-    ✦
-  </div>
-  <h1 className="text-xl font-semibold">CASA MOOD</h1>
-</a>
+        <div className="relative z-20 p-12 flex flex-col justify-between w-full">
+
+          <a href="/" className="flex items-center gap-3 cursor-pointer">
+            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+              ✦
+            </div>
+            <h1 className="text-xl font-semibold">CASA MOOD</h1>
+          </a>
 
           <div>
             <h2 className="text-4xl font-bold">
@@ -106,7 +113,9 @@ export default function Login()
             </span>
           </div>
 
+          {/* 🔥 LOGIN BUTTON */}
           <button
+            onClick={handleLogin}
             className="w-full mt-8 py-4 rounded-full text-white font-semibold text-lg shadow-lg hover:scale-[1.02] transition"
             style={{
               background:
