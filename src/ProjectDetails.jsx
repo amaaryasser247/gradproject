@@ -1,9 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+
+
 
 export default function ProjectDetails() {
 
 const navigate = useNavigate()
 const { id } = useParams()
+const [min, setMin] = useState(20000)
+const [max, setMax] = useState(1000000)
 
 return (
 
@@ -76,31 +81,7 @@ className="rounded-xl w-full"
 
 
 
-{/* BUDGET MODE */}
 
-<div className="bg-white rounded-2xl shadow p-6">
-
-<h2 className="text-xl font-semibold mb-6">
-Budget Mode
-</h2>
-
-<div className="grid md:grid-cols-3 gap-6">
-
-<button className="border p-6 rounded-xl hover:border-[#d97757] transition">
-Economy
-</button>
-
-<button className="border-2 border-[#d97757] text-[#d97757] p-6 rounded-xl">
-Mid-Range
-</button>
-
-<button className="border p-6 rounded-xl hover:border-[#d97757] transition">
-Premium
-</button>
-
-</div>
-
-</div>
 
 
 
@@ -230,6 +211,49 @@ Design Hub
 </div>
 
 
+{/* BUDGET RANGE */}
+
+<div className="bg-white rounded-2xl shadow p-6">
+
+  <h2 className="text-xl font-semibold mb-6">
+    Budget Range (EGP)
+  </h2>
+
+  <div className="bg-[#f1ebe6] rounded-2xl p-8">
+
+    <h3 className="text-xl font-semibold mb-6">
+      {min.toLocaleString()} - {max.toLocaleString()} EGP
+    </h3>
+
+    <p className="text-sm text-gray-500 mb-2">
+      Minimum
+    </p>
+
+    <input
+      type="range"
+      min="20000"
+      max="100000"
+      value={min}
+      onChange={(e)=>setMin(e.target.value)}
+      className="w-full mb-6"
+    />
+
+    <p className="text-sm text-gray-500 mb-2">
+      Maximum
+    </p>
+
+    <input
+      type="range"
+      min="20000"
+      max="100000"
+      value={max}
+      onChange={(e)=>setMax(e.target.value)}
+      className="w-full"
+    />
+
+  </div>
+
+</div>
 
 {/* COST SUMMARY */}
 

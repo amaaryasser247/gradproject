@@ -19,8 +19,7 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState("personal");
 
   const [form, setForm] = useState({
-    firstName: "John",
-    lastName: "Doe",
+   fullName: "John Doe",
     email: "john.doe@casamood.com",
     phone: "+20 100 123 4567",
     location: "Cairo, Egypt",
@@ -128,29 +127,17 @@ export default function Profile() {
                 <h3 className="text-lg font-bold text-[#1C1410] mb-6">Personal Information</h3>
                 <div className="grid grid-cols-2 gap-5">
 
-                  <div>
-                    <label className="text-sm font-medium text-gray-600 mb-1 block">First Name</label>
-                    <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3">
-                      <User size={16} className="text-gray-400" />
-                      <input
-                        className="flex-1 outline-none text-sm text-[#1C1410]"
-                        value={form.firstName}
-                        onChange={(e) => setForm({ ...form, firstName: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-gray-600 mb-1 block">Last Name</label>
-                    <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3">
-                      <User size={16} className="text-gray-400" />
-                      <input
-                        className="flex-1 outline-none text-sm text-[#1C1410]"
-                        value={form.lastName}
-                        onChange={(e) => setForm({ ...form, lastName: e.target.value })}
-                      />
-                    </div>
-                  </div>
+              <div className="col-span-2">
+  <label className="text-sm font-medium text-gray-600 mb-1 block">Full Name</label>
+  <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3">
+    <User size={16} className="text-gray-400" />
+    <input
+      className="flex-1 outline-none text-sm text-[#1C1410]"
+      value={form.fullName}
+      onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+    />
+  </div>
+</div>
 
                   <div>
                     <label className="text-sm font-medium text-gray-600 mb-1 block">Email Address</label>

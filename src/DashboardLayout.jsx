@@ -14,10 +14,8 @@ export default function DashboardLayout() {
 
         <nav className="space-y-2 flex-1">
           <SidebarLink to="/dashboard/overview" label="Overview" />
-          <SidebarLink to="/dashboard/upload" label="Upload Design" />
+          <SidebarLink to="/dashboard/upload" label="New Project" />
           <SidebarLink to="/dashboard/projects" label="My Projects" />
-          <SidebarLink to="/dashboard/budget" label="Budget Analyzer" />
-          <SidebarLink to="/dashboard/vendors" label="Compare Vendors" />
           <SidebarLink to="/dashboard/settings" label="Settings" />
         </nav>
 

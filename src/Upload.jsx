@@ -82,13 +82,15 @@ export default function Upload() {
 
         </div>
 
-        {/* ================= PROJECT DETAILS ================= */}
+        {/* ================= PROJECT NAME ================= */}
 
         <div className="bg-white rounded-2xl p-10 shadow">
 
-          <h2 className="text-2xl font-semibold mb-8">
-            Project Details
-          </h2>
+      <input
+  type="text"
+  placeholder="Project Name"
+  className="text-2xl font-semibold mb-8 w-full outline-none border-b border-gray-300 focus:border-[#d97757] pb-2"
+/>
 
           {/* ROOM TYPE */}
 
@@ -110,67 +112,9 @@ export default function Upload() {
             ))}
           </div>
 
-          {/* BUDGET */}
+      
 
-          <p className="text-gray-700 mb-4">
-            Budget Range (EGP)
-          </p>
-
-          <div className="bg-[#f1ebe6] rounded-2xl p-8 mb-10">
-
-            <h3 className="text-xl font-semibold mb-6">
-              {min.toLocaleString()} - {max.toLocaleString()} EGP
-            </h3>
-
-            <p className="text-sm text-gray-500 mb-2">
-              Minimum
-            </p>
-
-            <input
-              type="range"
-              min="20000"
-              max="100000"
-              value={min}
-              onChange={(e)=>setMin(e.target.value)}
-              className="w-full mb-6"
-            />
-
-            <p className="text-sm text-gray-500 mb-2">
-              Maximum
-            </p>
-
-            <input
-              type="range"
-              min="20000"
-              max="100000"
-              value={max}
-              onChange={(e)=>setMax(e.target.value)}
-              className="w-full"
-            />
-
-          </div>
-
-          {/* STYLE */}
-
-          <p className="text-gray-700 mb-4">
-            Style Preference
-          </p>
-
-          <div className="flex gap-4 flex-wrap">
-            {styles.map((s)=>(
-              <button
-                key={s}
-                onClick={()=>setStyle(s)}
-                className={`px-10 py-4 rounded-full border transition
-                ${style===s
-                  ? "border-[#5e6b5f] text-[#5e6b5f] bg-[#eef3f0]"
-                  : "border-gray-300 text-gray-700"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
+   
 
         </div>
 

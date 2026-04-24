@@ -8,12 +8,10 @@ export default function AddProduct() {
     category: "Seating",
     price: "",
     material: "",
-    style: "Modern",
     length: "",
     width: "",
     height: "",
     stock: "",
-    location: "",
     description: "",
     image: null
   })
@@ -67,23 +65,7 @@ export default function AddProduct() {
                 <input name="price" placeholder="Price (EGP)" className="bg-[#fffaf7] border p-3 rounded-lg" onChange={handleChange} />
               </div>
 
-              <input name="material" placeholder="Material" className="w-full bg-[#fffaf7] border p-3 rounded-lg mb-4" onChange={handleChange} />
-
-              <div className="flex gap-3">
-                {["Modern", "Classic", "Scandinavian", "Industrial"].map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => setForm({ ...form, style: s })}
-                    className={`px-4 py-2 rounded-full border ${
-                      form.style === s
-                        ? "bg-[#d97757] text-white"
-                        : "bg-[#fffaf7]"
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
+              <input name="material" placeholder="Material" className="w-full bg-[#fffaf7] border p-3 rounded-lg" onChange={handleChange} />
             </div>
 
             {/* DIMENSIONS */}
@@ -111,12 +93,17 @@ export default function AddProduct() {
             <div className="bg-white p-6 rounded-2xl shadow-md border">
               <h2 className="font-semibold mb-4">Additional Details</h2>
 
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <input name="stock" placeholder="Stock Quantity" className="border p-3 rounded-lg" onChange={handleChange} />
-                <input name="location" placeholder="Location" className="border p-3 rounded-lg" onChange={handleChange} />
+              <div className="mb-4">
+                <input name="stock" placeholder="Stock Quantity" className="border p-3 rounded-lg w-full" onChange={handleChange} />
               </div>
 
-              <textarea name="description" className="w-full border p-3 rounded-lg" rows="4" onChange={handleChange} />
+              <textarea
+                name="description"
+                placeholder="Description"
+                className="w-full border p-3 rounded-lg"
+                rows="4"
+                onChange={handleChange}
+              />
             </div>
 
           </div>
