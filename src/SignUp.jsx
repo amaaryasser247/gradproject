@@ -290,21 +290,29 @@ export default function SignUp() {
 
           </div>
 
-          <div className="mt-6 flex items-center gap-3 text-sm">
-            <input type="checkbox" />
-            <p>
-              I agree to the{" "}
-              <span className="text-[#d97757]">Terms of Service</span> and{" "}
-              <span className="text-[#d97757]">Privacy Policy</span>
-            </p>
-          </div>
+      <div className="mt-6 flex items-center gap-5 text-lg">
+  <input
+    type="checkbox"
+    className="w-6 h-6 accent-[#d97757] cursor-pointer"
+  />
+  <p className="leading-relaxed">
+    I agree to the{" "}
+    <span className="text-[#d97757] font-semibold cursor-pointer">
+      Terms of Service
+    </span>{" "}
+    and{" "}
+    <span className="text-[#d97757] font-semibold cursor-pointer">
+      Privacy Policy
+    </span>
+  </p>
+</div>
 
-          <button
-            onClick={handleSignUp}
-            className="w-full mt-8 bg-[#d97757] text-white py-4 rounded-full font-semibold text-lg shadow-lg hover:opacity-90 transition"
-          >
-            Create Account →
-          </button>
+      <button
+  onClick={handleSignUp}
+  className="w-full mt-8 bg-[#d97757] text-white py-6 text-2xl rounded-full font-bold shadow-2xl hover:opacity-90 transition flex items-center justify-center"
+>
+  Create Account
+</button>
 
           <p className="text-center mt-6 text-sm">
             Already have an account?{" "}

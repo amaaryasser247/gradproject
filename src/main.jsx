@@ -20,6 +20,7 @@ import VendorProfile from "./VendorProfile"
 import VendorLayout from "./VendorLayout"
 import EditProduct from "./EditProduct"
 import ProductPreview from "./ProductsPreview"
+import Store from "./Store"
 
 import "./index.css"
 
@@ -46,6 +47,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="profile" element={<VendorProfile />} />
         <Route path="/vendor/edit-product" element={<EditProduct />} />
         <Route path="/vendor/product-preview" element={<ProductPreview />} />
+    <Route path="store" element={<Store />} />
 
 
       </Route>

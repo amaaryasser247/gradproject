@@ -54,10 +54,11 @@ function App() {
 
     {/* Center Links */}
   <ul className="hidden md:flex items-center gap-10 text-gray-600 font-medium">
-  <li><a href="#features" className="hover:text-black transition">Features</a></li>
-  <li><a href="#how" className="hover:text-black transition">How It Works</a></li>
-  <li><a href="#vendors" className="hover:text-black transition">Vendors</a></li>
-  <li><a href="#testimonials" className="hover:text-black transition">Testimonials</a></li>
+  <li><a href="#features" className="text-[#d97757] font-semibold">Features</a></li>
+  <li><a href="#how" className="text-[#d97757] font-semibold">How It Works</a></li>
+  <li><Link to="/vendor/store" className="text-[#d97757] font-semibold">Store</Link></li>
+  <li><a href="#vendors" className="text-[#d97757] font-semibold">Vendors</a></li>
+  <li><a href="#testimonials" className="text-[#d97757] font-semibold">Testimonials</a></li>
 </ul>
 
     {/* Right Side */}
