@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const ALL_PRODUCTS = [
   {
@@ -234,10 +234,14 @@ function StarRating({ rating }) {
 }
 
 function ProductCard({ product }) {
+  const navigate = useNavigate()
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group">
       {/* Image */}
-      <div className="relative overflow-hidden h-52">
+      <div
+  className="relative overflow-hidden h-52 cursor-pointer"
+ onClick={() => navigate("/vendor/product-preview", { state: product })}
+>
         <img
           src={product.image}
           alt={product.name}
