@@ -1,0 +1,416 @@
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { User, Mail, Lock, Briefcase, Palette, Building2, Phone, MapPin, FileText, Image, MessageCircle } from "lucide-react"
+import { getApiErrorMessage } from "./services/api"
+import { registerUser } from "./services/authService"
+
+export default function SignUp() {
+  const [role, setRole] = useState("designer")
+  const navigate = useNavigate()
+
+  const [fullName, setFullName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+
+  const [designerPhone, setDesignerPhone] = useState("")
+
+  const [companyName, setCompanyName] = useState("")
+  const [vendorPhone, setVendorPhone] = useState("")
+  const [whatsApp, setWhatsApp] = useState("")
+  const [location, setLocation] = useState("")
+  const [bio, setBio] = useState("")
+  const [logoUrl, setLogoUrl] = useState("")
+  const [logoFile, setLogoFile] = useState(null)
+
+  const [agreed, setAgreed] = useState(false)
+  const [submitError, setSubmitError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSignUp = async () => {
+    setSubmitError("")
+
+    if (!agreed) {
+      setSubmitError("Please agree to the Terms of Service and Privacy Policy to continue.")
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match")
+      return
+    }
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters")
+      return
+    }
+    setPasswordError("")
+
+    if (role === "vendor" && !logoFile) {
+      setSubmitError("Logo Image is required for Vendors")
+      return
+    }
+
+    if (role === "vendor" && whatsApp.trim()) {
+      try {
+        const url = new URL(whatsApp.trim())
+        if (!url.hostname.includes('wa.me') && !url.hostname.includes('whatsapp')) {
+          setSubmitError("Please enter a valid WhatsApp Link (e.g. https://wa.me/...)")
+          return
+        }
+      } catch (_) {
+        setSubmitError("Please enter a valid WhatsApp Link (e.g. https://wa.me/...)")
+        return
+      }
+    }
+
+    let finalPayload;
+
+    if (role === "vendor") {
+      const formData = new FormData()
+      formData.append("FullName", fullName)
+      formData.append("Email", email)
+      formData.append("Password", password)
+      formData.append("ConfirmPassword", confirmPassword)
+      formData.append("Role", "Vendor")
+      formData.append("Phone", vendorPhone)
+      if (companyName) formData.append("CompanyName", companyName)
+      if (whatsApp) formData.append("WhatsAppLink", whatsApp.trim())
+      if (location) formData.append("Location", location)
+      if (bio) formData.append("Bio", bio)
+      if (logoFile) formData.append("LogoImage", logoFile)
+      
+      finalPayload = formData
+    } else {
+      const formData = new FormData()
+      formData.append("FullName", fullName)
+      formData.append("Email", email)
+      formData.append("Password", password)
+      formData.append("ConfirmPassword", confirmPassword)
+      formData.append("Role", "Designer")
+      formData.append("Phone", designerPhone || "0000000000")
+      
+      // Dummy values for fields required by the API but not present in the Designer form
+      formData.append("CompanyName", "Designer Studio")
+      formData.append("WhatsAppLink", "https://wa.me/201000000000")
+      formData.append("Location", "Cairo, Egypt")
+      formData.append("Bio", "Professional Interior Designer")
+      
+      finalPayload = formData
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const result = await registerUser(finalPayload)
+      localStorage.setItem("casamood_user", JSON.stringify({ fullName, email, role }))
+
+      const userRole = result?.data?.role?.toLowerCase()
+      if (userRole === "vendor") {
+        navigate("/vendor/products")
+      } else {
+        navigate("/")
+      }
+    } catch (error) {
+      setSubmitError(getApiErrorMessage(error, "Unable to create account. Please try again."))
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex bg-[#f5f1ec]">
+
+      <div
+        className="hidden lg:flex w-1/2 relative text-white"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: "linear-gradient(135deg, rgba(199,111,86,0.85), rgba(94,107,95,0.85))" }}
+        />
+        <div className="relative z-20 p-12 flex flex-col justify-between w-full">
+          <a href="/" className="flex items-center gap-3 cursor-pointer">
+            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">✦</div>
+            <h1 className="text-xl font-semibold">CASA MOOD</h1>
+          </a>
+          <div>
+            <h2 className="text-4xl font-bold">Join CASA MOOD Today</h2>
+            <p className="mt-6 text-lg text-white/90 max-w-md">
+              Start transforming interior designs into real market costs with AI-powered precision.
+            </p>
+          </div>
+          <p className="text-sm text-white/80">Trusted by 500+ interior designers across Egypt</p>
+        </div>
+      </div>
+
+      <div className="flex w-full lg:w-1/2 items-start justify-center px-8 py-12 overflow-y-auto">
+        <div className="w-full max-w-lg">
+
+          <h1 className="text-3xl font-bold text-gray-800">Create Account</h1>
+          <p className="mt-2 text-gray-600">Choose your role and get started in minutes</p>
+
+          <div className="mt-8 flex gap-6">
+            <div
+              onClick={() => setRole("designer")}
+              className={`flex-1 cursor-pointer rounded-2xl p-6 text-center border-2 transition
+              ${role === "designer" ? "border-[#d97757] bg-[#f7e8e2]" : "border-gray-200 bg-white"}`}
+            >
+              <Palette className={`mx-auto mb-3 ${role === "designer" ? "text-[#d97757]" : "text-gray-400"}`} />
+              <p className="font-semibold">Designer</p>
+            </div>
+            <div
+              onClick={() => setRole("vendor")}
+              className={`flex-1 cursor-pointer rounded-2xl p-6 text-center border-2 transition
+              ${role === "vendor" ? "border-[#d97757] bg-[#f7e8e2]" : "border-gray-200 bg-white"}`}
+            >
+              <Briefcase className={`mx-auto mb-3 ${role === "vendor" ? "text-[#d97757]" : "text-gray-400"}`} />
+              <p className="font-semibold">Vendor</p>
+            </div>
+          </div>
+
+          <div className="mt-8 space-y-5">
+
+            <div>
+              <label className="text-sm font-medium">Full Name</label>
+              <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                <User size={18} className="text-gray-400 mr-3" />
+                <input
+                  type="text"
+                  placeholder="John Doe"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="w-full outline-none bg-transparent"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Email Address</label>
+              <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                <Mail size={18} className="text-gray-400 mr-3" />
+                <input
+                  type="email"
+                  placeholder="designer@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full outline-none bg-transparent"
+                />
+              </div>
+            </div>
+
+            {role === "designer" && (
+              <div>
+                <label className="text-sm font-medium">Phone</label>
+                <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                  <Phone size={18} className="text-gray-400 mr-3" />
+                  <input
+                    type="tel"
+                    placeholder="+20 10 0000 0000"
+                    value={designerPhone}
+                    onChange={(e) => setDesignerPhone(e.target.value)}
+                    className="w-full outline-none bg-transparent"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="text-sm font-medium">Password</label>
+              <div className={`mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm ${passwordError ? "ring-1 ring-red-400" : ""}`}>
+                <Lock size={18} className="text-gray-400 mr-3" />
+                <input
+                  type="password"
+                  placeholder="Create a password"
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setPasswordError("") }}
+                  className="w-full outline-none bg-transparent"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Confirm Password</label>
+              <div className={`mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm ${passwordError ? "ring-1 ring-red-400" : ""}`}>
+                <Lock size={18} className="text-gray-400 mr-3" />
+                <input
+                  type="password"
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(e) => { setConfirmPassword(e.target.value); setPasswordError("") }}
+                  className="w-full outline-none bg-transparent"
+                />
+              </div>
+              {passwordError && (
+                <p className="text-red-500 text-xs mt-1.5">⚠ {passwordError}</p>
+              )}
+            </div>
+
+            {role === "vendor" && (
+              <>
+                <div className="flex items-center gap-3 pt-2">
+                  <div className="flex-1 h-px bg-[#f0e6e0]" />
+                  <span className="text-xs text-[#d97757] font-semibold uppercase tracking-widest">Vendor Info</span>
+                  <div className="flex-1 h-px bg-[#f0e6e0]" />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Company Name</label>
+                  <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                    <Building2 size={18} className="text-gray-400 mr-3" />
+                    <input
+                      type="text"
+                      placeholder="Your company name"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      className="w-full outline-none bg-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Phone</label>
+                  <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                    <Phone size={18} className="text-gray-400 mr-3" />
+                    <input
+                      type="tel"
+                      placeholder="+20 10 0000 0000"
+                      value={vendorPhone}
+                      onChange={(e) => setVendorPhone(e.target.value)}
+                      className="w-full outline-none bg-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">WhatsApp Link</label>
+                  <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                    <MessageCircle size={18} className="text-gray-400 mr-3" />
+                    <input
+                      type="text"
+                      placeholder="https://wa.me/20100000000"
+                      value={whatsApp}
+                      onChange={(e) => setWhatsApp(e.target.value)}
+                      className="w-full outline-none bg-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Location</label>
+                  <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                    <MapPin size={18} className="text-gray-400 mr-3" />
+                    <input
+                      type="text"
+                      placeholder="Cairo, Egypt"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="w-full outline-none bg-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Bio</label>
+                  <div className="mt-2 flex items-start bg-white rounded-xl px-4 py-3 shadow-sm">
+                    <FileText size={18} className="text-gray-400 mr-3 mt-0.5" />
+                    <textarea
+                      rows={3}
+                      placeholder="Tell us about your business..."
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      className="w-full outline-none bg-transparent resize-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Logo Image</label>
+                  <div className="mt-2">
+                    <label className="flex flex-col items-center justify-center w-full cursor-pointer">
+                      {logoUrl ? (
+                        <div className="relative w-full flex items-center justify-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                          <img
+                            src={logoUrl}
+                            alt="Logo preview"
+                            className="h-16 w-16 object-contain rounded-lg"
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => { e.preventDefault(); setLogoUrl(""); setLogoFile(null); }}
+                            className="absolute top-2 right-2 text-xs text-gray-400 hover:text-red-400 transition"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-3 w-full bg-white rounded-xl px-4 py-3 shadow-sm border-2 border-dashed border-gray-200 hover:border-[#d97757] transition">
+                          <Image size={18} className="text-gray-400" />
+                          <span className="text-gray-400 text-sm">Click to upload logo</span>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files[0]
+                          if (file) {
+                            setLogoFile(file)
+                            const reader = new FileReader()
+                            reader.onload = () => setLogoUrl(reader.result)
+                            reader.readAsDataURL(file)
+                          }
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </>
+            )}
+
+          </div>
+
+          <div className="mt-6 flex items-center gap-5 text-lg">
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => {
+                setAgreed(e.target.checked)
+                if (e.target.checked) setSubmitError("")
+              }}
+              className="w-6 h-6 accent-[#d97757] cursor-pointer"
+            />
+            <p className="leading-relaxed">
+              I agree to the{" "}
+              <span className="text-[#d97757] font-semibold cursor-pointer">Terms of Service</span>
+              {" "}and{" "}
+              <span className="text-[#d97757] font-semibold cursor-pointer">Privacy Policy</span>
+            </p>
+          </div>
+
+          {submitError && (
+            <p className="mt-4 text-sm text-red-500">⚠ {submitError}</p>
+          )}
+
+          <button
+            onClick={handleSignUp}
+            disabled={isSubmitting}
+            className="w-full mt-8 bg-[#d97757] text-white py-6 text-2xl rounded-full font-bold shadow-2xl hover:opacity-90 transition flex items-center justify-center disabled:opacity-60"
+          >
+            {isSubmitting ? "Creating Account..." : "Create Account"}
+          </button>
+
+          <p className="text-center mt-6 text-sm">
+            Already have an account?{" "}
+            <a href="/login" className="text-[#d97757] font-medium">Sign In</a>
+          </p>
+
+        </div>
+      </div>
+    </div>
+  )
+}
