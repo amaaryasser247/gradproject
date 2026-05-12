@@ -21,111 +21,10 @@ async function getProjectById(projectId) {
   return { data: await response.json() }
 }
 
-const ROOM_IMAGE_URL =
-  "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200&q=80"
-
-const PRODUCT_IMAGES = [
-  "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80",
-  "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80",
-  "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=80",
-  "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&q=80",
-  "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
-  "https://images.unsplash.com/photo-1549497538-303791108f95?w=400&q=80",
-]
-
-const detectedItems = [
-  {
-    id: 1,
-    label: "Table Lamp",
-    category: "Lighting",
-    crop: { x: 2, y: 30, width: 18, height: 55 },
-    matchedProducts: [
-      { id: "m101", name: "Cream Drum Shade Lamp", vendor: "Mobilia", price: 4200, category: "Lighting", dimensions: "H 55cm × Ø 30cm" },
-      { id: "m102", name: "Linen Floor Lamp", vendor: "HomeBox", price: 3800, category: "Lighting", dimensions: "H 150cm × Ø 35cm" },
-      { id: "m103", name: "Nordic Table Lamp", vendor: "IKEA Egypt", price: 2900, category: "Lighting", dimensions: "H 45cm × Ø 25cm" },
-      { id: "m104", name: "Marble Base Lamp", vendor: "Decora", price: 5100, category: "Lighting", dimensions: "H 60cm × Ø 28cm" },
-    ],
-  },
-  {
-    id: 2,
-    label: "Accent Armchair",
-    category: "Seating",
-    crop: { x: 5, y: 60, width: 22, height: 38 },
-    matchedProducts: [
-      { id: "m201", name: "Blue Velvet Armchair", vendor: "IKEA Egypt", price: 8500, category: "Seating", dimensions: "W 80cm × D 85cm × H 95cm" },
-      { id: "m202", name: "Wing Chair - Teal", vendor: "Mobilia", price: 9200, category: "Seating", dimensions: "W 75cm × D 80cm × H 100cm" },
-    ],
-  },
-  {
-    id: 3,
-    label: "Wall Art",
-    category: "Decor",
-    crop: { x: 30, y: 5, width: 40, height: 65 },
-    matchedProducts: [
-      { id: "m301", name: "Abstract Canvas Print", vendor: "ArtHouse", price: 2800, category: "Decor", dimensions: "W 90cm × H 120cm" },
-      { id: "m302", name: "Watercolor Wall Art", vendor: "Decora", price: 3100, category: "Decor", dimensions: "W 80cm × H 100cm" },
-      { id: "m303", name: "Framed Nature Art", vendor: "HomeBox", price: 1950, category: "Decor", dimensions: "W 60cm × H 80cm" },
-    ],
-  },
-  {
-    id: 4,
-    label: "Window Curtains",
-    category: "Textiles",
-    crop: { x: 0, y: 0, width: 15, height: 75 },
-    matchedProducts: [
-      { id: "m401", name: "Sheer White Curtains", vendor: "HomeBox", price: 1500, category: "Textiles", dimensions: "W 140cm × H 260cm" },
-      { id: "m402", name: "Linen Drape Panels", vendor: "IKEA Egypt", price: 1800, category: "Textiles", dimensions: "W 145cm × H 250cm" },
-    ],
-  },
-  {
-    id: 5,
-    label: "Side Table",
-    category: "Tables",
-    crop: { x: 75, y: 55, width: 22, height: 42 },
-    matchedProducts: [
-      { id: "m501", name: "Round Marble Side Table", vendor: "Mobilia", price: 5600, category: "Tables", dimensions: "Ø 50cm × H 55cm" },
-      { id: "m502", name: "Glass End Table", vendor: "HomeBox", price: 4100, category: "Tables", dimensions: "W 45cm × D 45cm × H 60cm" },
-      { id: "m503", name: "Wooden Accent Table", vendor: "IKEA Egypt", price: 3200, category: "Tables", dimensions: "W 40cm × D 40cm × H 55cm" },
-      { id: "m504", name: "Metal Frame Side Table", vendor: "Decora", price: 2750, category: "Tables", dimensions: "W 35cm × D 35cm × H 50cm" },
-    ],
-  },
-]
-
-function getProductImage(index) {
-  return PRODUCT_IMAGES[index % PRODUCT_IMAGES.length]
+function getProductImage(product) {
+  return product?.imageUrl || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80"
 }
 
-function useCroppedImages(items, imageUrl) {
-  const [croppedImgs, setCroppedImgs] = useState({})
-
-  useEffect(() => {
-    const img = new Image()
-    img.crossOrigin = "anonymous"
-    img.src = imageUrl
-
-    img.onload = () => {
-      const results = {}
-      items.forEach((item) => {
-        const THUMB = 80
-        const canvas = document.createElement("canvas")
-        canvas.width = THUMB
-        canvas.height = THUMB
-        const ctx = canvas.getContext("2d")
-
-        const srcX = (item.crop.x / 100) * img.naturalWidth
-        const srcY = (item.crop.y / 100) * img.naturalHeight
-        const srcW = (item.crop.width / 100) * img.naturalWidth
-        const srcH = (item.crop.height / 100) * img.naturalHeight
-
-        ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, THUMB, THUMB)
-        results[item.id] = canvas.toDataURL("image/jpeg", 0.85)
-      })
-      setCroppedImgs(results)
-    }
-  }, [imageUrl]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  return croppedImgs
-}
 
 export default function ProjectDetails() {
   const navigate = useNavigate()
@@ -153,81 +52,101 @@ export default function ProjectDetails() {
     return () => { cancelled = true }
   }, [id])
 
-  const [budget, setBudget] = useState(() => {
-    const storedBudget = localStorage.getItem("casaMoodProjectBudget")
-    return storedBudget ? Number(storedBudget) : 45000
-  })
-
+  const [budget, setBudget] = useState(0)
   const [products, setProducts] = useState([])
-  const [realProducts, setRealProducts] = useState([])
-  
-  useEffect(() => {
-    api.get('/Products/all').then(res => {
-      console.log("Products API Response:", res.data);
-      let items = res.data;
-      if (res.data?.data) items = res.data.data;
-      else if (res.data?.items) items = res.data.items;
-      else if (res.data?.$values) items = res.data.$values;
-      const fetched = Array.isArray(items) ? items : [];
-      console.log("Extracted Real Products:", fetched);
-      setRealProducts(fetched);
-      
-      if (fetched.length > 0) {
-        setProducts(fetched.slice(0, 3).map(p => ({ ...p, id: p.id || p.productId, quantity: 1 })));
-      }
-    }).catch(err => {
-      console.error("Failed to fetch products:", err);
-    })
-  }, [])
-
-  const dynamicDetectedItems = useMemo(() => {
-    if (!realProducts || realProducts.length === 0) return detectedItems;
-    return detectedItems.map((item, idx) => {
-      const subset = realProducts.slice(idx * 2, idx * 2 + 2);
-      if (subset.length === 0) return item;
-      return {
-        ...item,
-        matchedProducts: subset.map(rp => ({
-          ...rp,
-          id: rp.id || rp.productId,
-          vendor: rp.vendor || "CASA MOOD",
-          category: item.category,
-        }))
-      }
-    });
-  }, [realProducts])
-
-  useEffect(() => {
-    if (project?.budget != null) {
-      setBudget(project.budget)
-    }
-  }, [project])
-
-  useEffect(() => {
-    if (project?.selectedProducts && Array.isArray(project.selectedProducts) && realProducts.length > 0) {
-      // If the API returns pre-selected products, map them to the full product objects and set them as checked
-      const apiSelected = project.selectedProducts.map(sp => {
-        const fullProduct = realProducts.find(rp => (rp.id || rp.productId) === sp.productId)
-        if (fullProduct) {
-          const key = `${sp.id || "item"}-${fullProduct.id || fullProduct.productId}`
-          setSelectedMatched(prev => ({ ...prev, [key]: true }))
-          return { ...fullProduct, id: fullProduct.id || fullProduct.productId, quantity: sp.quantity || 1 }
-        }
-        return null
-      }).filter(Boolean)
-      
-      if (apiSelected.length > 0) {
-        setProducts(apiSelected)
-      }
-    }
-  }, [project, realProducts])
-
   const [selectedMatched, setSelectedMatched] = useState({})
   const [expandedItem, setExpandedItem] = useState(null)
   const [viewProduct, setViewProduct] = useState(null)
 
-  const croppedImgs = useCroppedImages(detectedItems, ROOM_IMAGE_URL)
+  useEffect(() => {
+    if (project) {
+      if (project.customerBudget != null) {
+        setBudget(project.customerBudget)
+      }
+      
+      // If there's an existing proposal or selected products, initialize them
+      if (project.selectedProducts && Array.isArray(project.selectedProducts)) {
+        const seen = new Set()
+        const selected = []
+        const matchedKeys = {}
+        
+        project.selectedProducts.forEach(sp => {
+          const product = sp.product || sp
+          if (!product) return
+          
+          const productId = product.id || product.productId || product.ProductId || product.Id
+          const name = (product.name || product.Name || "").trim().toLowerCase()
+          const price = product.price || product.Price || 0
+          
+          // Extremely aggressive deduplication: Name + Price is enough
+          const dedupeKey = `${name}-${price}`
+          
+          if (!seen.has(dedupeKey)) {
+            seen.add(dedupeKey)
+            const mapKey = `${sp.id || sp.productId || "item"}-${productId || dedupeKey}`
+            matchedKeys[mapKey] = true
+            selected.push({ 
+              ...product, 
+              id: productId || dedupeKey, 
+              name: name,
+              price: price,
+              quantity: sp.quantity || 1 
+            })
+          }
+        })
+        
+        setSelectedMatched(matchedKeys)
+        setProducts(selected)
+      }
+    }
+  }, [project])
 
+  const dynamicDetectedItems = useMemo(() => {
+    if (!project?.detectedObjects) return []
+    
+    const seenProductKeys = new Set()
+
+    return project.detectedObjects.map((obj, idx) => {
+      // Filter recommendations by similarity score >= 50% (0.5)
+      // and deduplicate products globally using a robust key
+      const uniqueRecommendations = []
+      
+      if (obj.recommendations) {
+        obj.recommendations.forEach(rec => {
+          const product = rec.product
+          if (!product) return
+
+          const productId = product.id || product.productId || product.ProductId || product.Id
+          const name = (product.name || product.Name || "").trim().toLowerCase()
+          const price = product.price || product.Price || 0
+          const score = rec.similarity_Score || 0
+          
+          // Extremely aggressive deduplication: Name + Price is enough
+          const dedupeKey = `${name}-${price}`
+          
+          if (score >= 0.5 && !seenProductKeys.has(dedupeKey)) {
+            seenProductKeys.add(dedupeKey)
+            uniqueRecommendations.push({
+              ...product,
+              id: productId || dedupeKey,
+              name: name,
+              price: price,
+              vendor: product.brand || product.Brand || "CASA MOOD",
+              similarity: score
+            })
+          }
+        })
+      }
+
+      return {
+        id: obj.id || idx,
+        label: obj.type.charAt(0).toUpperCase() + obj.type.slice(1),
+        category: obj.type,
+        cropUrl: obj.crop_Url,
+        matchedProducts: uniqueRecommendations
+      }
+    })
+  }, [project])
   const totals = useMemo(
     () => calculateCatalogTotals(products, budget),
     [budget, products]
@@ -276,37 +195,33 @@ export default function ProjectDetails() {
 
   const generateCatalog = async () => {
     try {
+      const productList = products.map(p => ({
+        productId: p.id || p.productId || p.ProductId || p.Id,
+        ProductId: p.id || p.productId || p.ProductId || p.Id,
+        quantity: p.quantity || 1,
+        Quantity: p.quantity || 1
+      }));
+
       const payload = {
         projectId: id,
-        selectedProducts: products.map(p => ({
-          productId: p.id,
-          quantity: p.quantity || 1
-        }))
+        ProjectId: id,
+        products: productList,
+        selectedProducts: productList,
+        items: productList,
+        Items: productList
       };
       
-      // إظهار رسالة للمستخدم لرؤية الداتا قبل إرسالها للتأكد من الهيكل
-      console.log("Sending Payload to /api/Proposals:", payload);
-      
-      if (payload.selectedProducts.length === 0) {
-        alert("Please select at least one product before generating the catalog.");
-        return;
-      }
-      
-      // Check if any selected product uses a fake ID (starts with "m")
-      const hasFakeIds = payload.selectedProducts.some(sp => String(sp.productId).startsWith("m"));
-      if (hasFakeIds) {
-        alert("⚠️ WARNING: You are trying to send dummy/fake products (IDs like m101) to the API!\n\nThis happens because no real products were loaded from your database (api.get('/Products') is empty). The backend will throw a 400 Bad Request because 'm101' is not a valid GUID.\n\nPlease add real products to your database first!");
-        return;
-      }
+      console.log("Sending Robust Proposal Payload:", payload);
       
       const { data } = await api.post('/Proposals', payload);
-      const proposalId = data.id || data.proposalId || data; // fallback to data if it returns string
+      const proposalId = data.id || data.proposalId || data.ProposalId || data; 
       navigate(`/dashboard/catalog/${proposalId}`);
     } catch (err) {
       console.error(err);
       alert("Failed to create proposal. " + (err.response?.data?.message || err.response?.statusText || err.message));
     }
   }
+
 
   return (
     <div className="space-y-8">
@@ -346,26 +261,23 @@ export default function ProjectDetails() {
         </div>
 
         <div className="relative">
-          <img
-            src={project?.imageUrl || project?.image || ROOM_IMAGE_URL}
-            alt="Detected modern living room"
-            className="h-96 w-full rounded-2xl object-cover"
-          />
-          <div className="absolute top-8 left-12 border-2 border-[#d97757] rounded-xl w-28 h-36 opacity-80 pointer-events-none">
-            <span className="absolute -top-5 left-0 bg-[#d97757] text-white text-xs px-2 py-0.5 rounded-md">Lamp</span>
-          </div>
-          <div className="absolute top-10 left-1/2 -translate-x-1/2 border-2 border-[#d97757] rounded-xl w-44 h-48 opacity-80 pointer-events-none">
-            <span className="absolute -top-5 left-0 bg-[#d97757] text-white text-xs px-2 py-0.5 rounded-md">Wall Art</span>
-          </div>
-          <div className="absolute top-8 right-12 border-2 border-[#d97757] rounded-xl w-28 h-36 opacity-80 pointer-events-none">
-            <span className="absolute -top-5 left-0 bg-[#d97757] text-white text-xs px-2 py-0.5 rounded-md">Lamp</span>
-          </div>
-          <div className="absolute bottom-8 left-14 border-2 border-blue-400 rounded-xl w-24 h-20 opacity-80 pointer-events-none">
-            <span className="absolute -top-5 left-0 bg-blue-400 text-white text-xs px-2 py-0.5 rounded-md">Chair</span>
-          </div>
-          <div className="absolute bottom-8 right-14 border-2 border-blue-400 rounded-xl w-24 h-20 opacity-80 pointer-events-none">
-            <span className="absolute -top-5 left-0 bg-blue-400 text-white text-xs px-2 py-0.5 rounded-md">Chair</span>
-          </div>
+          {projectLoading ? (
+            <div className="w-full h-96 bg-gray-100 animate-pulse rounded-2xl flex flex-col items-center justify-center gap-3">
+              <div className="w-12 h-12 rounded-full border-4 border-[#d97757] border-t-transparent animate-spin" />
+              <p className="text-[#d97757] font-medium animate-pulse">Loading analysis image...</p>
+            </div>
+          ) : (
+            <img
+              src={project?.detection_Image_Url || project?.imageUrl || project?.image}
+              alt="Detected room"
+              className="w-full h-auto rounded-2xl shadow-inner border border-gray-100"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200&q=80";
+              }}
+            />
+          )}
+
         </div>
       </div>
 
@@ -393,7 +305,7 @@ export default function ProjectDetails() {
                 const selectedCount = item.matchedProducts.filter(
                   (mp) => selectedMatched[`${item.id}-${mp.id}`]
                 ).length
-                const thumbSrc = croppedImgs[item.id]
+                const thumbSrc = item.cropUrl
 
                 return (
                   <div key={item.id} className="p-5">
@@ -429,81 +341,89 @@ export default function ProjectDetails() {
                       </div>
 
                       <div className="flex items-center gap-1.5 text-sm text-[#d97757] font-medium shrink-0">
-                        <span>{item.matchedProducts.length} matches</span>
+                        <span>{item.matchedProducts.length || 0} matches</span>
                         {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                       </div>
                     </div>
 
                     {isExpanded && (
                       <div className="mt-4 ml-20 space-y-2">
-                        {item.matchedProducts.map((mp, mpIdx) => {
-                          const key = `${item.id}-${mp.id}`
-                          const isChecked = !!selectedMatched[key]
-                          const productImg = getProductImage(mpIdx + item.id)
+                        {item.matchedProducts.length === 0 ? (
+                          <div className="p-4 text-center rounded-xl border border-dashed border-gray-200 bg-gray-50/50">
+                            <p className="text-sm text-gray-400 italic">
+                              No high-confidence matches found (Similarity {">"} 50%)
+                            </p>
+                          </div>
+                        ) : (
+                          item.matchedProducts.map((mp) => {
+                            const key = `${item.id}-${mp.id}`
+                            const isChecked = !!selectedMatched[key]
+                            const productImg = getProductImage(mp)
 
-                          return (
-                            <div
-                              key={mp.id}
-                              className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
-                                isChecked
-                                  ? "border-[#d97757] bg-[#d97757]/5"
-                                  : "border-gray-100 bg-gray-50"
-                              }`}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={() => toggleMatchedProduct(item.id, mp, productImg)}
-                                className="w-4 h-4 accent-[#d97757] shrink-0 cursor-pointer"
-                              />
-                              <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-gray-100">
-                                <img
-                                  src={productImg}
-                                  alt={mp.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-gray-800 truncate">
-                                  {mp.name}
-                                </p>
-                                <p className="text-xs text-gray-400">{mp.vendor}</p>
-                              </div>
-                              <span className="text-sm font-bold text-[#d97757] shrink-0">
-                                {formatCurrency(mp.price)}
-                              </span>
-                              {isChecked && (
-                                <div className="flex items-center gap-1 shrink-0">
-                                  <button
-                                    type="button"
-                                    onClick={() => updateMatchedQuantity(mp.id, -1)}
-                                    className="w-6 h-6 rounded-md border border-gray-200 bg-white text-gray-500 hover:border-[#d97757] hover:text-[#d97757] transition text-sm font-bold flex items-center justify-center"
-                                  >
-                                    −
-                                  </button>
-                                  <span className="w-6 text-center text-sm font-semibold text-gray-800">
-                                    {getMatchedQuantity(mp.id)}
-                                  </span>
-                                  <button
-                                    type="button"
-                                    onClick={() => updateMatchedQuantity(mp.id, 1)}
-                                    className="w-6 h-6 rounded-md border border-gray-200 bg-white text-gray-500 hover:border-[#d97757] hover:text-[#d97757] transition text-sm font-bold flex items-center justify-center"
-                                  >
-                                    +
-                                  </button>
-                                </div>
-                              )}
-                              <button
-                                type="button"
-                                onClick={() => setViewProduct({ ...mp, image: productImg })}
-                                className="p-1.5 rounded-lg border border-gray-200 text-gray-400 hover:text-[#d97757] hover:border-[#d97757] transition shrink-0"
-                                aria-label={`View details for ${mp.name}`}
+                            return (
+                              <div
+                                key={mp.id}
+                                className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                                  isChecked
+                                    ? "border-[#d97757] bg-[#d97757]/5"
+                                    : "border-gray-100 bg-gray-50"
+                                }`}
                               >
-                                <Eye size={15} />
-                              </button>
-                            </div>
-                          )
-                        })}
+                                <input
+                                  type="checkbox"
+                                  checked={isChecked}
+                                  onChange={() => toggleMatchedProduct(item.id, mp, productImg)}
+                                  className="w-4 h-4 accent-[#d97757] shrink-0 cursor-pointer"
+                                />
+                                <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-gray-100">
+                                  <img
+                                    src={productImg}
+                                    alt={mp.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-semibold text-gray-800 truncate">
+                                    {mp.name}
+                                  </p>
+                                  <p className="text-xs text-gray-400">{mp.vendor}</p>
+                                </div>
+                                <span className="text-sm font-bold text-[#d97757] shrink-0">
+                                  {formatCurrency(mp.price)}
+                                </span>
+                                {isChecked && (
+                                  <div className="flex items-center gap-1 shrink-0">
+                                    <button
+                                      type="button"
+                                      onClick={() => updateMatchedQuantity(mp.id, -1)}
+                                      className="w-6 h-6 rounded-md border border-gray-200 bg-white text-gray-500 hover:border-[#d97757] hover:text-[#d97757] transition text-sm font-bold flex items-center justify-center"
+                                    >
+                                      −
+                                    </button>
+                                    <span className="w-6 text-center text-sm font-semibold text-gray-800">
+                                      {getMatchedQuantity(mp.id)}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => updateMatchedQuantity(mp.id, 1)}
+                                      className="w-6 h-6 rounded-md border border-gray-200 bg-white text-gray-500 hover:border-[#d97757] hover:text-[#d97757] transition text-sm font-bold flex items-center justify-center"
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => setViewProduct({ ...mp, image: productImg })}
+                                  className="p-1.5 rounded-lg border border-gray-200 text-gray-400 hover:text-[#d97757] hover:border-[#d97757] transition shrink-0"
+                                  aria-label={`View details for ${mp.name}`}
+                                >
+                                  <Eye size={15} />
+                                </button>
+                              </div>
+                            )
+                          })
+                        )}
                       </div>
                     )}
                   </div>
@@ -585,12 +505,18 @@ export default function ProjectDetails() {
             <div className="px-5 py-4 space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Vendor</span>
-                <span className="font-semibold text-gray-800">{viewProduct.vendor}</span>
+                <span className="font-semibold text-gray-800">{viewProduct.vendor || "CASA MOOD"}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Category</span>
-                <span className="text-gray-700">{viewProduct.category}</span>
+                <span className="text-gray-700">{viewProduct.category || "General"}</span>
               </div>
+              {viewProduct.material && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">Material</span>
+                  <span className="text-gray-700 font-medium">{viewProduct.material}</span>
+                </div>
+              )}
               {viewProduct.dimensions && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Dimensions</span>
@@ -601,6 +527,14 @@ export default function ProjectDetails() {
                 <span className="text-gray-500">Price</span>
                 <span className="font-bold text-[#d97757]">{formatCurrency(viewProduct.price)}</span>
               </div>
+              {viewProduct.description && (
+                <div className="pt-2 border-t border-gray-100">
+                  <p className="text-gray-400 text-[10px] uppercase font-bold mb-1 tracking-wider">Description</p>
+                  <p className="text-gray-600 text-xs leading-relaxed max-h-24 overflow-y-auto">
+                    {viewProduct.description}
+                  </p>
+                </div>
+              )}
             </div>
             <div className="px-5 pb-5">
               <button

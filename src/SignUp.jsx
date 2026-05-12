@@ -51,18 +51,7 @@ export default function SignUp() {
       return
     }
 
-    if (role === "vendor" && whatsApp.trim()) {
-      try {
-        const url = new URL(whatsApp.trim())
-        if (!url.hostname.includes('wa.me') && !url.hostname.includes('whatsapp')) {
-          setSubmitError("Please enter a valid WhatsApp Link (e.g. https://wa.me/...)")
-          return
-        }
-      } catch (_) {
-        setSubmitError("Please enter a valid WhatsApp Link (e.g. https://wa.me/...)")
-        return
-      }
-    }
+
 
     let finalPayload;
 

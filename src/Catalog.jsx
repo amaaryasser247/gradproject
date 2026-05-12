@@ -55,10 +55,13 @@ export default function Catalog() {
         setProjectId(data.projectId || id)
         setCreatedAt(data.createdAt || new Date().toISOString())
         
+        // Supporting both 'items' and 'propertyItems' as per user request
         let mappedProducts = []
-        if (Array.isArray(data.items)) mappedProducts = data.items
-        else if (Array.isArray(data.selectedProducts)) mappedProducts = data.selectedProducts
-        else if (Array.isArray(data.products)) mappedProducts = data.products
+        const rawItems = data.propertyItems || data.items || data.selectedProducts || data.products || []
+        
+        console.log("Full PropertyItems/Items received:", rawItems);
+        
+        if (Array.isArray(rawItems)) mappedProducts = rawItems
         
         // Extract real products from Products/all response
         let allProducts = productsRes.data;
@@ -67,21 +70,32 @@ export default function Catalog() {
         else if (productsRes.data?.$values) allProducts = productsRes.data.$values;
         if (!Array.isArray(allProducts)) allProducts = [];
         
-        // Ensure products have quantity and product info
-        setProducts(mappedProducts.map(p => {
-          const pId = p.productId || p.id;
-          const fullProduct = allProducts.find(rp => (rp.id || rp.productId) === pId) || {};
+        // Map and Sort by matchScore (descending)
+        const processed = mappedProducts.map((p, index) => {
+          const pId = String(p.productId || p.ProductId || p.id || p.Id || "");
+          const fullProduct = allProducts.find(rp => 
+            pId && String(rp.id || rp.productId || rp.Id || rp.ProductId) === pId
+          ) || {};
+          
+          const pInfo = p.product || p.Product || {};
+          
           return {
             ...fullProduct,
-            ...p.product,
+            ...pInfo,
             ...p,
-            id: pId || p.id || Math.random().toString(),
-            name: p.productName || fullProduct.name || "Unknown Product",
-            image: p.imageUrl || fullProduct.image || "",
-            price: p.price || fullProduct.price || 0,
-            quantity: p.quantity || 1
+            id: pId || `item-${index}`,
+            name: p.productName || p.ProductName || pInfo.name || pInfo.Name || fullProduct.name || "Unknown Product",
+            matchedName: p.matchedName || p.MatchedName || p.matchName || "",
+            image: p.imageUrl || p.ImageUrl || pInfo.image || pInfo.imageUrl || p.image || fullProduct.image || "",
+            price: p.estimatedPrice || p.EstimatedPrice || p.price || p.Price || pInfo.price || fullProduct.price || 0,
+            quantity: p.quantity || p.Quantity || 1,
+            unit: p.unit || p.Unit || "unit",
+            matchScore: Number(p.matchScore || p.MatchScore || 0),
+            category: p.category || p.Category || p.categoryName || p.CategoryName || fullProduct.category || ""
           }
-        }))
+        }).sort((a, b) => b.matchScore - a.matchScore);
+
+        setProducts(processed)
       } catch (err) {
         console.error(err)
         setError("Failed to load the proposal from the server.")
@@ -345,13 +359,23 @@ export default function Catalog() {
               <div className="space-y-4 p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-[#d97757]">{product.category}</p>
-                    <h3 className="text-lg font-bold text-[#1C1410]">{product.name}</h3>
-                    <p className="text-sm text-[#7A6A5F]">by {product.vendor}</p>
+                    <p className="text-sm font-semibold text-[#d97757]">
+                      {product?.category || "Product"}
+                      {product?.matchScore > 0 && (
+                        <span className="ml-2 bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[10px]">
+                          {product.matchScore}% Match
+                        </span>
+                      )}
+                    </p>
+                    <h3 className="text-lg font-bold text-[#1C1410]">{product?.name}</h3>
+                    {product?.matchedName && (
+                      <p className="text-xs text-blue-600 font-medium italic">Matched: {product.matchedName}</p>
+                    )}
+                    <p className="text-sm text-[#7A6A5F]">by {product?.vendor || "Vendor"}</p>
                   </div>
                   <button
                     onClick={() => removeProduct(product.id)}
-                    className="no-print rounded-full border p-2 text-red-500"
+                    className="no-print rounded-full border p-2 text-red-500 hover:bg-red-50 transition"
                     aria-label={`Remove ${product.name}`}
                   >
                     <Trash2 size={16} />
@@ -360,26 +384,26 @@ export default function Catalog() {
 
                 <div className="grid grid-cols-2 gap-y-2 text-sm text-[#7A6A5F]">
                   <span>SKU</span>
-                  <span className="text-right text-[#1C1410]">{product.sku}</span>
+                  <span className="text-right text-[#1C1410]">{product?.sku || "N/A"}</span>
                   <span>Material</span>
-                  <span className="text-right text-[#1C1410]">{product.material}</span>
+                  <span className="text-right text-[#1C1410]">{product?.material || "N/A"}</span>
                   <span>Dimensions</span>
-                  <span className="text-right text-[#1C1410]">{product.dimensions}</span>
+                  <span className="text-right text-[#1C1410]">{product?.dimensions || "N/A"}</span>
                 </div>
 
                 <div className="grid gap-3 rounded-2xl bg-[#fffaf7] p-4 sm:grid-cols-3">
                   <div>
-                    <p className="text-xs text-[#7A6A5F]">Price</p>
-                    <p className="font-bold text-[#C1714A]">{formatCurrency(product.price)}</p>
+                    <p className="text-xs text-[#7A6A5F]">Est. Price</p>
+                    <p className="font-bold text-[#C1714A]">{formatCurrency(product?.price)}</p>
                   </div>
                   <label>
-                    <span className="text-xs text-[#7A6A5F]">Quantity</span>
+                    <span className="text-xs text-[#7A6A5F]">Quantity ({product?.unit || "unit"})</span>
                     <input
                       type="number"
                       min="1"
-                      value={product.quantity}
+                      value={product?.quantity}
                       onChange={(event) => updateQuantity(product.id, event.target.value)}
-                      className="mt-1 w-full rounded-xl border bg-white px-3 py-2 font-semibold"
+                      className="mt-1 w-full rounded-xl border bg-white px-3 py-2 font-semibold outline-none focus:border-[#C1714A]"
                     />
                   </label>
                   <div>
