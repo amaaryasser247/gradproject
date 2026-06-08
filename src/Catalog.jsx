@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import {
   Camera,
   FileText,
   Mail,
-  Plus,
   Printer,
   Send,
   Share2,
@@ -13,8 +12,6 @@ import {
 import api from "./services/api"
 import {
   buildShareUrl,
-  calculateCatalogTotals,
-  catalogProducts,
   formatCurrency,
   sendCatalogEmail,
   saveCatalog,
@@ -31,6 +28,7 @@ export default function Catalog() {
   const [roomType, setRoomType] = useState("Room")
   const [projectId, setProjectId] = useState(id)
   const [createdAt, setCreatedAt] = useState(new Date().toISOString())
+  const [totals, setTotals] = useState({ subtotal: 0, tax: 0, fees: 0, total: 0, remainingBudget: 0, isOverBudget: false })
   
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState("")
@@ -42,59 +40,101 @@ export default function Catalog() {
   useEffect(() => {
     async function loadProposal() {
       try {
-        const [proposalRes, productsRes] = await Promise.all([
-          api.get(`/Proposals/${id}`),
-          api.get('/Products/all').catch(() => ({ data: [] }))
-        ]);
+        const proposalRes = await api.get(`/Proposals/${id}`);
         
         const data = proposalRes.data;
-        console.log("Proposal API Response:", data);
+        console.log("=== PROPOSAL API RESPONSE ===", JSON.stringify(data, null, 2));
         setCatalogName(data.name || "Interior Proposal")
-        setBudget(data.budget || data.customerBudget || 0)
         setRoomType(data.roomType || "Living Room")
-        setProjectId(data.projectId || id)
+        const pId = data.projectId || id
+        setProjectId(pId)
         setCreatedAt(data.createdAt || new Date().toISOString())
+
+        // ✅ Use the pre-calculated totals from the API directly
+        const subtotal = Number(data.subTotal ?? data.SubTotal ?? data.subtotal ?? 0)
+        const vat      = Number(data.vat ?? data.Vat ?? data.tax ?? 0)
+        const fees     = Number(data.deliveryFee ?? data.DeliveryFee ?? data.delivery ?? 500)
+        const total    = Number(data.totalCost ?? data.TotalCost ?? data.total ?? (subtotal + vat + fees))
+
+        // Fetch project to get the customer budget (proposal API doesn't include it)
+        let budgetNum = Number(data.budget ?? data.customerBudget ?? 0)
+        if (!budgetNum && pId) {
+          try {
+            const projRes = await api.get(`/Projects/${pId}`)
+            budgetNum = Number(projRes.data?.customerBudget ?? projRes.data?.budget ?? 0)
+          } catch { /* ignore */ }
+        }
+        setBudget(budgetNum)
+
+        console.log("TOTALS FROM API:", { subtotal, vat, fees, total, budgetNum })
+        setTotals({
+          subtotal,
+          tax: vat,
+          fees,
+          total,
+          remainingBudget: budgetNum - total,
+          isOverBudget: budgetNum > 0 && budgetNum < total,
+        })
         
-        // Supporting both 'items' and 'propertyItems' as per user request
-        let mappedProducts = []
         const rawItems = data.propertyItems || data.items || data.selectedProducts || data.products || []
+        console.log("=== RAW ITEMS ===", JSON.stringify(rawItems, null, 2));
         
-        console.log("Full PropertyItems/Items received:", rawItems);
-        
-        if (Array.isArray(rawItems)) mappedProducts = rawItems
-        
-        // Extract real products from Products/all response
-        let allProducts = productsRes.data;
-        if (productsRes.data?.data) allProducts = productsRes.data.data;
-        else if (productsRes.data?.items) allProducts = productsRes.data.items;
-        else if (productsRes.data?.$values) allProducts = productsRes.data.$values;
-        if (!Array.isArray(allProducts)) allProducts = [];
-        
-        // Map and Sort by matchScore (descending)
-        const processed = mappedProducts.map((p, index) => {
-          const pId = String(p.productId || p.ProductId || p.id || p.Id || "");
-          const fullProduct = allProducts.find(rp => 
-            pId && String(rp.id || rp.productId || rp.Id || rp.ProductId) === pId
-          ) || {};
-          
-          const pInfo = p.product || p.Product || {};
-          
+        if (!Array.isArray(rawItems) || rawItems.length === 0) {
+          setProducts([])
+          return
+        }
+
+        // Map items — API returns unitPrice, vendorName, productName, imageUrl
+        const processed = rawItems.map((p, index) => {
+          const itemId = String(p.productId || p.ProductId || p.id || p.Id || "").trim();
+          const pInfo  = p.product || p.Product || {};
+
+          const resolvedPrice =
+            Number(p.unitPrice ?? p.UnitPrice) ||
+            Number(p.price ?? p.Price) ||
+            Number(p.estimatedPrice ?? p.EstimatedPrice) ||
+            Number(pInfo.price ?? pInfo.Price) ||
+            Number(p.totalPrice ?? p.TotalPrice) ||
+            0;
+
+          const resolvedName =
+            p.productName || p.ProductName ||
+            pInfo.name || pInfo.Name || "Unknown Product";
+
+          const resolvedImage =
+            p.imageUrl || p.ImageUrl ||
+            pInfo.imageUrl || pInfo.image || "";
+
+          const resolvedCategory =
+            p.category || p.Category || p.categoryName ||
+            pInfo.category || pInfo.Category || "";
+
+          const resolvedVendor =
+            p.vendorName || p.VendorName ||
+            p.vendor || p.Vendor ||
+            pInfo.vendor || pInfo.brand || "Vendor";
+
+          console.log(`Item[${index}]:`, { name: resolvedName, price: resolvedPrice, vendor: resolvedVendor });
+
           return {
-            ...fullProduct,
             ...pInfo,
-            ...p,
-            id: pId || `item-${index}`,
-            name: p.productName || p.ProductName || pInfo.name || pInfo.Name || fullProduct.name || "Unknown Product",
-            matchedName: p.matchedName || p.MatchedName || p.matchName || "",
-            image: p.imageUrl || p.ImageUrl || pInfo.image || pInfo.imageUrl || p.image || fullProduct.image || "",
-            price: p.estimatedPrice || p.EstimatedPrice || p.price || p.Price || pInfo.price || fullProduct.price || 0,
+            id: itemId || `item-${index}`,
+            name: resolvedName,
+            image: resolvedImage,
+            price: resolvedPrice,
             quantity: p.quantity || p.Quantity || 1,
+            sku: p.sku || p.Sku || pInfo.sku || "N/A",
+            material: p.material || p.Material || pInfo.material || "",
+            dimensions: p.dimensions || p.Dimensions || pInfo.dimensions || "",
             unit: p.unit || p.Unit || "unit",
+            vendor: resolvedVendor,
             matchScore: Number(p.matchScore || p.MatchScore || 0),
-            category: p.category || p.Category || p.categoryName || p.CategoryName || fullProduct.category || ""
+            category: resolvedCategory,
+            matchedName: p.matchedName || p.MatchedName || "",
           }
         }).sort((a, b) => b.matchScore - a.matchScore);
 
+        console.log("=== PROCESSED ===", processed.map(p => ({ name: p.name, price: p.price, vendor: p.vendor })));
         setProducts(processed)
       } catch (err) {
         console.error(err)
@@ -106,10 +146,7 @@ export default function Catalog() {
     loadProposal()
   }, [id])
 
-  const totals = useMemo(
-    () => calculateCatalogTotals(products, budget),
-    [budget, products]
-  )
+  // totals is set directly from API response (no local recalculation needed)
 
   const catalog = {
     id,
@@ -119,9 +156,7 @@ export default function Catalog() {
     createdAt,
   }
   const shareUrl = buildShareUrl(id)
-  const availableProducts = catalogProducts.filter(
-    (product) => !products.some((item) => item.id === product.id)
-  )
+
 
   const updateQuantity = (productId, quantity) => {
     setProducts((current) =>
@@ -326,17 +361,6 @@ export default function Catalog() {
             <p className="text-sm text-[#7A6A5F]">
               Quantity changes update totals, fees, and budget instantly.
             </p>
-          </div>
-          <div className="no-print flex flex-wrap gap-2">
-            {availableProducts.map((product) => (
-              <button
-                key={product.id}
-                onClick={() => addProduct(product)}
-                className="flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-semibold text-[#C1714A]"
-              >
-                <Plus size={14} /> {product.category}
-              </button>
-            ))}
           </div>
         </div>
 
