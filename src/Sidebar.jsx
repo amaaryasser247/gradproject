@@ -1,4 +1,5 @@
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import { logoutUser } from "./services/authService"
 import {
   Package,
   PlusCircle,
@@ -11,6 +12,12 @@ import {
 
 export default function Sidebar() {
   const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logoutUser()
+    navigate("/login")
+  }
 
   const menu = [
     { name: "Products", icon: Package, path: "/vendor/products" },
@@ -22,15 +29,17 @@ export default function Sidebar() {
   ]
 
   return (
-    <div className="w-64 h-screen fixed left-0 top-0 bg-[#f3ede7] flex flex-col border-r">
+    <div className="w-64 h-screen fixed left-0 top-0 bg-card flex flex-col border-r border-border shadow-sm">
 
       
-      <Link to="/" className="flex items-center gap-3 p-6">
-        <div className="w-10 h-10 rounded-full bg-[#d97757] text-white flex items-center justify-center">
-          ✦
-        </div>
-        <h1 className="font-bold text-lg">CASA MOOD</h1>
-      </Link>
+      <div className="flex items-center justify-between p-6">
+        <Link to="/" className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center font-bold">
+            ✦
+          </div>
+          <h1 className="font-bold text-lg text-foreground">CASA MOOD</h1>
+        </Link>
+      </div>
 
       
       <div className="px-4 flex flex-col gap-2">
@@ -44,8 +53,8 @@ export default function Sidebar() {
               to={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${
                 active
-                  ? "bg-[#d97757] text-white shadow"
-                  : "text-gray-600 hover:bg-[#eaded6]"
+                  ? "bg-accent text-white shadow"
+                  : "text-muted-foreground hover:bg-muted"
               }`}
             >
               <Icon size={18} />
@@ -56,18 +65,18 @@ export default function Sidebar() {
       </div>
 
       
-      <div className="mt-auto p-4 border-t">
-        <div className="flex items-center gap-3 bg-[#e7ded7] p-3 rounded-xl mb-3">
-          <div className="w-10 h-10 rounded-full bg-[#b85c3f] text-white flex items-center justify-center">
+      <div className="mt-auto p-4 border-t border-border">
+        <div className="flex items-center gap-3 bg-muted p-3 rounded-xl mb-3">
+          <div className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center font-bold">
             JD
           </div>
           <div>
-            <p className="text-sm font-semibold">John Doe</p>
-            <p className="text-xs text-gray-500">Vendor</p>
+            <p className="text-sm font-semibold text-foreground">John Doe</p>
+            <p className="text-xs text-muted-foreground">Vendor</p>
           </div>
         </div>
 
-        <button className="flex w-full items-center gap-2 rounded-xl px-4 py-3 text-gray-600 transition hover:bg-[#eaded6] hover:text-red-500">
+        <button onClick={handleLogout} className="flex w-full items-center gap-2 rounded-xl px-4 py-3 text-muted-foreground transition hover:bg-muted hover:text-red-500">
           <LogOut size={18} />
           Logout
         </button>

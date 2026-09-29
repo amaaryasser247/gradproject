@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import Sidebar from "./Sidebar"
 import { getApiErrorMessage } from "./services/api"
 import { deleteProduct, getProducts } from "./services/productService"
 
@@ -109,18 +108,16 @@ export default function Products() {
   return (
     <div className="flex">
 
-      <div className="w-64 fixed h-full">
-        <Sidebar />
-      </div>
+      
 
-      <div className="ml-64 w-full bg-[#f5f1ec] min-h-screen p-8">
+      <div className=" w-full bg-background min-h-screen p-8">
 
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-[#2f2f2f]">Products</h1>
 
           <button
             onClick={() => navigate("/vendor/add-product")}
-            className="bg-[#d97757] text-white px-5 py-2 rounded-xl shadow hover:scale-105 transition"
+            className="bg-accent text-white px-5 py-2 rounded-xl shadow hover:scale-105 transition"
           >
             + Add Product
           </button>
@@ -136,13 +133,13 @@ export default function Products() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search products..."
-            className="flex-1 bg-white border border-[#f0e6e0] p-3 rounded-xl outline-none focus:border-[#d97757]"
+            className="flex-1 bg-card border border-[#f0e6e0] p-3 rounded-xl outline-none focus:border-[#d97757]"
           />
 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="bg-white border border-[#f0e6e0] p-3 rounded-xl"
+            className="bg-card border border-[#f0e6e0] p-3 rounded-xl"
           >
             {categories.map((c, i) => (
               <option key={i}>{c}</option>
@@ -152,7 +149,7 @@ export default function Products() {
           <select
             value={stock}
             onChange={(e) => setStock(e.target.value)}
-            className="bg-white border border-[#f0e6e0] p-3 rounded-xl"
+            className="bg-card border border-[#f0e6e0] p-3 rounded-xl"
           >
             <option>All Stock Status</option>
             <option>In Stock</option>
@@ -161,9 +158,9 @@ export default function Products() {
 
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#eee] overflow-hidden">
+        <div className="bg-card rounded-2xl shadow-sm border border-[#eee] overflow-hidden">
 
-          <div className="grid grid-cols-6 px-6 py-4 text-sm text-gray-500 bg-[#faf7f4]">
+          <div className="grid grid-cols-6 px-6 py-4 text-sm text-muted-foreground bg-[#faf7f4]">
             <span>Product</span>
             <span>Category</span>
             <span>Price</span>
@@ -186,13 +183,13 @@ export default function Products() {
                 </div>
               </div>
 
-              <span className="bg-[#f7e8e2] text-[#d97757] px-3 py-1 rounded-full text-xs w-fit">
+              <span className="bg-[#f7e8e2] text-accent px-3 py-1 rounded-full text-xs w-fit">
                 {p.category}
               </span>
 
               <span className="font-semibold">{p.price}</span>
 
-              <span className="text-gray-500">{p.size}</span>
+              <span className="text-muted-foreground">{p.size}</span>
 
               <span className={`px-3 py-1 rounded-full text-xs w-fit ${
                 p.stock > 20
@@ -209,7 +206,7 @@ export default function Products() {
                 
                 <svg
                   onClick={() => handleView(p)}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-[#d97757]"
+                  className="w-5 h-5 cursor-pointer text-muted-foreground hover:text-accent"
                   fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"
                 >
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -219,7 +216,7 @@ export default function Products() {
                 
                 <svg
                   onClick={() => handleEdit(p)}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-blue-500"
+                  className="w-5 h-5 cursor-pointer text-muted-foreground hover:text-blue-500"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
@@ -232,7 +229,7 @@ export default function Products() {
                 
                 <svg
                   onClick={() => handleDelete(p.id)}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-red-500"
+                  className="w-5 h-5 cursor-pointer text-muted-foreground hover:text-red-500"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"

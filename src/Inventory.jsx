@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Sidebar from "./Sidebar";
 import { Package, TrendingDown, AlertTriangle, Search } from "lucide-react";
 
 const products = [
@@ -19,10 +18,10 @@ const statusStyle = (status) => {
 };
 
 const availableColor = (status) => {
-  if (status === "In Stock")    return "text-[#C1714A]";
-  if (status === "Low Stock")   return "text-[#C1714A]";
-  if (status === "Out of Stock") return "text-[#C1714A]";
-  return "text-[#C1714A]";
+  if (status === "In Stock")    return "text-accent";
+  if (status === "Low Stock")   return "text-accent";
+  if (status === "Out of Stock") return "text-accent";
+  return "text-accent";
 };
 
 export default function Inventory() {
@@ -45,32 +44,30 @@ export default function Inventory() {
     setSelected(selected.length === filtered.length ? [] : filtered.map((p) => p.id));
 
   return (
-    <div className="min-h-screen bg-[#F5F0EB] overflow-x-hidden">
+    <div className="min-h-screen bg-background overflow-x-hidden">
 
-      <div className="w-64 fixed h-full z-10 left-0">
-        <Sidebar />
-      </div>
+      
 
-      <div className="ml-64 py-8 pr-8 pl-4 flex flex-col min-h-screen">
+      <div className=" py-8 pr-8 pl-4 flex flex-col min-h-screen">
 
         
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#1C1410]">Inventory Management</h1>
-          <p className="text-[#7A6A5F] mt-1">Track and manage your product inventory levels</p>
+          <h1 className="text-3xl font-bold text-foreground">Inventory Management</h1>
+          <p className="text-muted-foreground mt-1">Track and manage your product inventory levels</p>
         </div>
 
         
         <div className="grid grid-cols-4 gap-6 mb-8">
           {[
-            { label: "Total Stock",    value: 132, icon: <Package size={22} className="text-[#C1714A]" />,      bg: "bg-orange-100" },
-            { label: "Reserved",       value: 20,  icon: <Package size={22} className="text-[#C1714A]" />,      bg: "bg-orange-100" },
+            { label: "Total Stock",    value: 132, icon: <Package size={22} className="text-accent" />,      bg: "bg-orange-100" },
+            { label: "Reserved",       value: 20,  icon: <Package size={22} className="text-accent" />,      bg: "bg-orange-100" },
             { label: "Low Stock",      value: 3,   icon: <TrendingDown size={22} className="text-yellow-600" />, bg: "bg-yellow-100", valColor: "text-yellow-600" },
             { label: "Out of Stock",   value: 1,   icon: <AlertTriangle size={22} className="text-red-500" />,   bg: "bg-red-100",    valColor: "text-red-500" },
           ].map(({ label, value, icon, bg, valColor }, i) => (
-            <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+            <div key={i} className="bg-card p-6 rounded-2xl shadow-sm border border-border flex justify-between items-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
               <div>
-                <p className="text-sm text-gray-500 font-medium">{label}</p>
-                <h2 className={`text-3xl font-bold mt-1 ${valColor || "text-[#1C1410]"}`}>{value}</h2>
+                <p className="text-sm text-muted-foreground font-medium">{label}</p>
+                <h2 className={`text-3xl font-bold mt-1 ${valColor || "text-foreground"}`}>{value}</h2>
               </div>
               <div className={`w-12 h-12 ${bg} flex items-center justify-center rounded-xl`}>
                 {icon}
@@ -80,19 +77,19 @@ export default function Inventory() {
         </div>
 
         
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4 flex items-center gap-4">
+        <div className="bg-card rounded-2xl shadow-sm border border-border p-4 mb-4 flex items-center gap-4">
           <div className="flex-1 flex items-center gap-2 text-gray-400">
             <Search size={18} />
             <input
               type="text"
               placeholder="Search by product name or SKU..."
-              className="w-full outline-none text-sm text-gray-700 placeholder-gray-400"
+              className="w-full outline-none text-sm text-foreground placeholder-gray-400"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <select
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 outline-none"
+            className="border border-border rounded-lg px-3 py-2 text-sm text-muted-foreground outline-none"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -101,7 +98,7 @@ export default function Inventory() {
             ))}
           </select>
           <select
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 outline-none"
+            className="border border-border rounded-lg px-3 py-2 text-sm text-muted-foreground outline-none"
             value={stockLevel}
             onChange={(e) => setStockLevel(e.target.value)}
           >
@@ -112,10 +109,10 @@ export default function Inventory() {
         </div>
 
         
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex-1 overflow-hidden">
+        <div className="bg-card rounded-2xl shadow-sm border border-border flex-1 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-100 text-gray-400 uppercase text-xs">
+              <tr className="border-b border-border text-gray-400 uppercase text-xs">
                 <th className="p-4 w-8">
                   <input
                     type="checkbox"
@@ -148,14 +145,14 @@ export default function Inventory() {
                     <div className="flex items-center gap-3">
                       <img src={item.image} alt={item.name} className="w-12 h-12 rounded-xl object-cover" />
                       <div>
-                        <p className="font-semibold text-[#1C1410]">{item.name}</p>
+                        <p className="font-semibold text-foreground">{item.name}</p>
                         <p className="text-gray-400 text-xs">{item.category}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="p-4 text-gray-500">{item.sku}</td>
-                  <td className="p-4 font-bold text-[#1C1410]">{item.stock}</td>
-                  <td className="p-4 text-gray-500">{item.reserved}</td>
+                  <td className="p-4 text-muted-foreground">{item.sku}</td>
+                  <td className="p-4 font-bold text-foreground">{item.stock}</td>
+                  <td className="p-4 text-muted-foreground">{item.reserved}</td>
                   <td className={`p-4 font-bold ${availableColor(item.status)}`}>{item.available}</td>
                   <td className="p-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 w-fit ${statusStyle(item.status)}`}>
@@ -165,7 +162,7 @@ export default function Inventory() {
                     </span>
                   </td>
                   <td className="p-4">
-                    <button className="bg-[#C1714A] hover:bg-[#a85e3a] text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors duration-200">
+                    <button className="bg-accent hover:bg-[#a85e3a] text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors duration-200">
                       Restock
                     </button>
                   </td>

@@ -1,17 +1,10 @@
-import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 60 },
-  show: { opacity: 1, y: 0 }
-}
 function Card({ icon, title, desc }) {
   return (
-    <div className="bg-white rounded-2xl p-8 text-left shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
+    <div className="bg-card rounded-2xl p-8 text-left shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
       <div
-        className="w-14 h-14 rounded-full flex items-center justify-center mb-6"
-        style={{ background: "linear-gradient(135deg,#c76f56,#5e6b5f)" }}
+        className="w-14 h-14 rounded-full flex items-center justify-center mb-6 bg-accent"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +19,7 @@ function Card({ icon, title, desc }) {
       </div>
 
       <h3 className="text-xl font-semibold">{title}</h3>
-      <p className="mt-3 text-gray-600 leading-relaxed">{desc}</p>
+      <p className="mt-3 text-muted-foreground leading-relaxed">{desc}</p>
     </div>
   )
 }
@@ -34,15 +27,15 @@ function Card({ icon, title, desc }) {
 function App() {
   const navigate = useNavigate()
   return (
-    <div className="bg-[#f5f1ec] text-gray-800 font-sans">
+    <div className="bg-background text-foreground font-sans min-h-screen">
 
 
-<nav className="sticky top-0 z-50 bg-white shadow-sm">
+<nav className="sticky top-0 z-50 bg-card shadow-sm border-b border-border">
   <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
 
   <Link to="/" className="flex items-center gap-3">
-  <div className="w-10 h-10 bg-[#e7cfc5] rounded-full flex items-center justify-center text-[#c76f56] font-bold">
+  <div className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center text-accent font-bold">
     ✦
   </div>
   <h1 className="text-lg font-semibold tracking-wide">
@@ -51,26 +44,26 @@ function App() {
 </Link>
 
 
-  <ul className="hidden md:flex items-center gap-10 text-gray-600 font-medium">
-  <li><a href="#features" className="text-[#d97757] font-semibold">Features</a></li>
-  <li><a href="#how" className="text-[#d97757] font-semibold">How It Works</a></li>
-  <li><Link to="/vendor/store" className="text-[#d97757] font-semibold">Store</Link></li>
-  <li><a href="#vendors" className="text-[#d97757] font-semibold">Vendors</a></li>
-  <li><a href="#testimonials" className="text-[#d97757] font-semibold">Testimonials</a></li>
+  <ul className="hidden md:flex items-center gap-10 text-muted-foreground font-medium">
+  <li><a href="#features" className="text-accent font-semibold">Features</a></li>
+  <li><a href="#how" className="text-accent font-semibold">How It Works</a></li>
+  <li><Link to="/vendor/store" className="text-accent font-semibold">Store</Link></li>
+  <li><a href="#vendors" className="text-accent font-semibold">Vendors</a></li>
+  <li><a href="#testimonials" className="text-accent font-semibold">Testimonials</a></li>
 </ul>
 
 
     <div className="flex items-center gap-6">
 <button
   onClick={() => navigate("/login")}
-  className="text-gray-700 font-medium hover:text-black transition"
+  className="text-foreground font-medium hover:text-accent transition"
 >
   Login
 </button>
 
       <a
   href="/signup"
-  className="bg-[#d97757] text-white px-6 py-2 rounded-full shadow-md hover:opacity-90 transition inline-block"
+  className="bg-accent text-accent-foreground px-6 py-2 rounded-full shadow-md hover:opacity-90 transition inline-block text-white"
 >
   Get Started
 </a>
@@ -82,17 +75,17 @@ function App() {
 
       <section id="hero" className="max-w-7xl mx-auto px-6 py-24">
 
-        <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm text-gray-600 mb-6">
+        <div className="inline-flex items-center gap-2 bg-card px-4 py-2 rounded-full shadow-sm text-foreground mb-6">
            AI-Powered Interior Design Platform
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight max-w-4xl">
+        <h1 className="text-4xl md:text-6xl font-bold leading-tight max-w-4xl text-foreground">
           Turn Interior Designs <br />
-          Into <span className="text-[#d97757]">Real Market</span> <br />
-          <span className="text-[#6b6b55]">Costs</span> Instantly
+          Into <span className="text-accent">Real Market</span> <br />
+          <span className="text-muted-foreground">Costs</span> Instantly
         </h1>
 
-        <p className="mt-6 text-lg text-gray-600 max-w-2xl">
+        <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
           Upload your 2D design, let AI detect furniture automatically,
           and get matched with real products from Egyptian market vendors.
           Generate professional catalogs in minutes, not days.
@@ -100,57 +93,57 @@ function App() {
 
         <div className="mt-8 flex flex-col sm:flex-row gap-4">
 <Link to="/dashboard/upload">
-  <button className="bg-[#d97757] text-white px-6 py-3 rounded-xl shadow-lg hover:opacity-90 transition">
+  <button className="bg-accent text-white px-6 py-3 rounded-xl shadow-lg hover:opacity-90 transition">
     Upload Design
   </button>
 </Link>
 
-          <button className="bg-white px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition">
+          <button className="bg-card px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition">
             Explore Vendors →
           </button>
         </div>
 
       </section>
 
-     <section id="how" className="py-24 bg-white">
+     <section id="how" className="py-24 bg-card">
   <div className="max-w-7xl mx-auto px-6 text-center">
 
     <h2 className="text-3xl md:text-5xl font-bold">
       How It Works
     </h2>
 
-    <p className="mt-4 text-gray-600">
+    <p className="mt-4 text-muted-foreground">
       Transform your design workflow in three simple steps
     </p>
 
     <div className="mt-16 grid md:grid-cols-3 gap-8">
 
-      <div className="bg-[#f5f1ec] rounded-2xl p-10 text-left shadow hover:shadow-xl transition">
-        <h3 className="text-5xl font-bold text-[#c76f56]">01</h3>
+      <div className="bg-background rounded-2xl p-10 text-left shadow hover:shadow-xl transition">
+        <h3 className="text-5xl font-bold text-accent">01</h3>
         <h4 className="mt-6 text-xl font-semibold">
           Upload Your Design
         </h4>
-        <p className="mt-4 text-gray-600">
+        <p className="mt-4 text-muted-foreground">
           Simply drag and drop your 2D interior design images
         </p>
       </div>
 
-      <div className="bg-[#f5f1ec] rounded-2xl p-10 text-left shadow hover:shadow-xl transition">
-        <h3 className="text-5xl font-bold text-[#c76f56]">02</h3>
+      <div className="bg-background rounded-2xl p-10 text-left shadow hover:shadow-xl transition">
+        <h3 className="text-5xl font-bold text-accent">02</h3>
         <h4 className="mt-6 text-xl font-semibold">
           AI Detects Furniture
         </h4>
-        <p className="mt-4 text-gray-600">
+        <p className="mt-4 text-muted-foreground">
           Our AI identifies every piece of furniture and decor automatically
         </p>
       </div>
 
-      <div className="bg-[#f5f1ec] rounded-2xl p-10 text-left shadow hover:shadow-xl transition">
-        <h3 className="text-5xl font-bold text-[#c76f56]">03</h3>
+      <div className="bg-background rounded-2xl p-10 text-left shadow hover:shadow-xl transition">
+        <h3 className="text-5xl font-bold text-accent">03</h3>
         <h4 className="mt-6 text-xl font-semibold">
           Get Cost & Catalog
         </h4>
-        <p className="mt-4 text-gray-600">
+        <p className="mt-4 text-muted-foreground">
           Receive accurate costs and a professional catalog instantly
         </p>
       </div>
@@ -161,14 +154,14 @@ function App() {
 </section>
 
 
-      <section id="features" className="py-24 bg-[#f1ebe6]">
+      <section id="features" className="py-24 bg-muted">
         <div className="max-w-7xl mx-auto px-6 text-center">
 
           <h2 className="text-3xl md:text-5xl font-bold">
             Why CASA MOOD
           </h2>
 
-          <p className="mt-4 text-gray-600">
+          <p className="mt-4 text-muted-foreground">
             Everything you need to streamline your interior design workflow
           </p>
 
@@ -220,14 +213,14 @@ function App() {
       </section>
 
 
-<section id="vendors" className="py-24 bg-[#f5f1ec]">
+<section id="vendors" className="py-24 bg-background">
   <div className="max-w-7xl mx-auto px-6 text-center">
 
-    <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+    <h2 className="text-4xl md:text-5xl font-bold text-foreground">
       Featured Vendors
     </h2>
 
-    <p className="mt-4 text-lg text-gray-600">
+    <p className="mt-4 text-lg text-muted-foreground">
       Trusted Egyptian furniture suppliers with verified products
     </p>
 
@@ -241,7 +234,7 @@ function App() {
       ].map((vendor, i) => (
         <div
           key={i}
-          className="bg-white rounded-2xl p-10 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+          className="bg-card rounded-2xl p-10 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
         >
 
 
@@ -254,11 +247,11 @@ function App() {
             {vendor.initials}
           </div>
 
-          <h3 className="text-xl font-semibold text-gray-800">
+          <h3 className="text-xl font-semibold text-foreground">
             {vendor.name}
           </h3>
 
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-muted-foreground">
             {vendor.products}
           </p>
 
@@ -271,21 +264,21 @@ function App() {
 
 </section>
 
-<section id="testimonials" className="py-24 bg-[#f1ebe6]">
+<section id="testimonials" className="py-24 bg-muted">
   <div className="max-w-7xl mx-auto px-6 text-center">
 
-    <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+    <h2 className="text-4xl md:text-5xl font-bold text-foreground">
       What Designers Say
     </h2>
 
-    <p className="mt-4 text-lg text-gray-600">
+    <p className="mt-4 text-lg text-muted-foreground">
       Join hundreds of designers who trust CASA MOOD
     </p>
 
     <div className="mt-16 grid md:grid-cols-2 gap-10">
 
 
-      <div className="bg-white rounded-2xl p-10 shadow-md hover:shadow-xl transition-all duration-300 text-left">
+      <div className="bg-card rounded-2xl p-10 shadow-md hover:shadow-xl transition-all duration-300 text-left">
 
         <div className="flex items-center gap-5">
 
@@ -297,12 +290,12 @@ function App() {
 
           <div>
             <h3 className="text-lg font-semibold">Sara Ahmed</h3>
-            <p className="text-gray-600">Interior Designer</p>
+            <p className="text-muted-foreground">Interior Designer</p>
           </div>
 
         </div>
 
-        <p className="mt-6 text-gray-700 leading-relaxed">
+        <p className="mt-6 text-foreground leading-relaxed">
           "CASA MOOD has transformed how I present projects to clients.
           What used to take days now takes minutes!"
         </p>
@@ -311,7 +304,7 @@ function App() {
           {[1,2,3,4,5].map((i) => (
             <div
               key={i}
-              className="w-4 h-4 bg-[#d97757] rounded-full"
+              className="w-4 h-4 bg-accent rounded-full"
             ></div>
           ))}
         </div>
@@ -319,7 +312,7 @@ function App() {
       </div>
 
 
-      <div className="bg-white rounded-2xl p-10 shadow-md hover:shadow-xl transition-all duration-300 text-left">
+      <div className="bg-card rounded-2xl p-10 shadow-md hover:shadow-xl transition-all duration-300 text-left">
 
         <div className="flex items-center gap-5">
 
@@ -331,12 +324,12 @@ function App() {
 
           <div>
             <h3 className="text-lg font-semibold">Khaled Ibrahim</h3>
-            <p className="text-gray-600">Design Studio Owner</p>
+            <p className="text-muted-foreground">Design Studio Owner</p>
           </div>
 
         </div>
 
-        <p className="mt-6 text-gray-700 leading-relaxed">
+        <p className="mt-6 text-foreground leading-relaxed">
           "The accuracy of the AI detection and real market pricing
           has increased our client satisfaction significantly."
         </p>
@@ -345,7 +338,7 @@ function App() {
           {[1,2,3,4,5].map((i) => (
             <div
               key={i}
-              className="w-4 h-4 bg-[#d97757] rounded-full"
+              className="w-4 h-4 bg-accent rounded-full"
             ></div>
           ))}
         </div>
@@ -373,7 +366,7 @@ function App() {
       Join CASA MOOD today and start creating professional catalogs in minutes
     </p>
 
-    <button className="mt-12 bg-white text-[#c76f56] px-10 py-4 rounded-full text-lg font-semibold shadow-xl hover:scale-105 transition duration-300">
+    <button className="mt-12 bg-card text-accent px-10 py-4 rounded-full text-lg font-semibold shadow-xl hover:scale-105 transition duration-300">
       Get Started Free
     </button>
 
@@ -381,7 +374,7 @@ function App() {
 </section>
 
 
-<footer className="bg-[#f5f1ec] pt-20 pb-10">
+<footer className="bg-background pt-20 pb-10">
   <div className="max-w-7xl mx-auto px-6">
 
 
@@ -396,12 +389,12 @@ function App() {
           >
             ✦
           </div>
-          <h3 className="text-xl font-semibold text-gray-800">
+          <h3 className="text-xl font-semibold text-foreground">
             CASA MOOD
           </h3>
         </div>
 
-        <p className="text-gray-600 leading-relaxed">
+        <p className="text-muted-foreground leading-relaxed">
           AI-powered interior design cost estimation
           platform for Egyptian market
         </p>
@@ -409,10 +402,10 @@ function App() {
 
 
       <div>
-        <h4 className="font-semibold text-gray-800 mb-6">
+        <h4 className="font-semibold text-foreground mb-6">
           Product
         </h4>
-        <ul className="space-y-3 text-gray-600">
+        <ul className="space-y-3 text-muted-foreground">
           <li className="hover:text-black transition cursor-pointer">Features</li>
           <li className="hover:text-black transition cursor-pointer">How It Works</li>
           <li className="hover:text-black transition cursor-pointer">Pricing</li>
@@ -421,10 +414,10 @@ function App() {
 
 
       <div>
-        <h4 className="font-semibold text-gray-800 mb-6">
+        <h4 className="font-semibold text-foreground mb-6">
           Company
         </h4>
-        <ul className="space-y-3 text-gray-600">
+        <ul className="space-y-3 text-muted-foreground">
           <li className="hover:text-black transition cursor-pointer">About</li>
           <li className="hover:text-black transition cursor-pointer">Blog</li>
           <li className="hover:text-black transition cursor-pointer">Contact</li>
@@ -433,10 +426,10 @@ function App() {
 
 
       <div>
-        <h4 className="font-semibold text-gray-800 mb-6">
+        <h4 className="font-semibold text-foreground mb-6">
           Legal
         </h4>
-        <ul className="space-y-3 text-gray-600">
+        <ul className="space-y-3 text-muted-foreground">
           <li className="hover:text-black transition cursor-pointer">Privacy Policy</li>
           <li className="hover:text-black transition cursor-pointer">Terms of Service</li>
         </ul>
@@ -445,7 +438,7 @@ function App() {
     </div>
 
 
-    <div className="border-t border-gray-300 mt-16 pt-6 text-center text-gray-600">
+    <div className="border-t border-gray-300 mt-16 pt-6 text-center text-muted-foreground">
       © 2026 CASA MOOD. All rights reserved.
     </div>
 

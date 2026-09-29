@@ -108,7 +108,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex bg-[#f5f1ec]">
+    <div className="min-h-screen flex bg-background">
 
       <div
         className="hidden lg:flex w-1/2 relative text-white"
@@ -123,7 +123,7 @@ export default function SignUp() {
         />
         <div className="relative z-20 p-12 flex flex-col justify-between w-full">
           <a href="/" className="flex items-center gap-3 cursor-pointer">
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">✦</div>
+            <div className="w-10 h-10 rounded-full bg-card/20 flex items-center justify-center">✦</div>
             <h1 className="text-xl font-semibold">CASA MOOD</h1>
           </a>
           <div>
@@ -139,24 +139,24 @@ export default function SignUp() {
       <div className="flex w-full lg:w-1/2 items-start justify-center px-8 py-12 overflow-y-auto">
         <div className="w-full max-w-lg">
 
-          <h1 className="text-3xl font-bold text-gray-800">Create Account</h1>
-          <p className="mt-2 text-gray-600">Choose your role and get started in minutes</p>
+          <h1 className="text-3xl font-bold text-foreground">Create Account</h1>
+          <p className="mt-2 text-muted-foreground">Choose your role and get started in minutes</p>
 
           <div className="mt-8 flex gap-6">
             <div
               onClick={() => setRole("designer")}
               className={`flex-1 cursor-pointer rounded-2xl p-6 text-center border-2 transition
-              ${role === "designer" ? "border-[#d97757] bg-[#f7e8e2]" : "border-gray-200 bg-white"}`}
+              ${role === "designer" ? "border-[#d97757] bg-[#f7e8e2]" : "border-border bg-card"}`}
             >
-              <Palette className={`mx-auto mb-3 ${role === "designer" ? "text-[#d97757]" : "text-gray-400"}`} />
+              <Palette className={`mx-auto mb-3 ${role === "designer" ? "text-accent" : "text-gray-400"}`} />
               <p className="font-semibold">Designer</p>
             </div>
             <div
               onClick={() => setRole("vendor")}
               className={`flex-1 cursor-pointer rounded-2xl p-6 text-center border-2 transition
-              ${role === "vendor" ? "border-[#d97757] bg-[#f7e8e2]" : "border-gray-200 bg-white"}`}
+              ${role === "vendor" ? "border-[#d97757] bg-[#f7e8e2]" : "border-border bg-card"}`}
             >
-              <Briefcase className={`mx-auto mb-3 ${role === "vendor" ? "text-[#d97757]" : "text-gray-400"}`} />
+              <Briefcase className={`mx-auto mb-3 ${role === "vendor" ? "text-accent" : "text-gray-400"}`} />
               <p className="font-semibold">Vendor</p>
             </div>
           </div>
@@ -165,7 +165,7 @@ export default function SignUp() {
 
             <div>
               <label className="text-sm font-medium">Full Name</label>
-              <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+              <div className="mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm">
                 <User size={18} className="text-gray-400 mr-3" />
                 <input
                   type="text"
@@ -179,7 +179,7 @@ export default function SignUp() {
 
             <div>
               <label className="text-sm font-medium">Email Address</label>
-              <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+              <div className="mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm">
                 <Mail size={18} className="text-gray-400 mr-3" />
                 <input
                   type="email"
@@ -194,7 +194,7 @@ export default function SignUp() {
             {role === "designer" && (
               <div>
                 <label className="text-sm font-medium">Phone</label>
-                <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                <div className="mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm">
                   <Phone size={18} className="text-gray-400 mr-3" />
                   <input
                     type="tel"
@@ -209,7 +209,7 @@ export default function SignUp() {
 
             <div>
               <label className="text-sm font-medium">Password</label>
-              <div className={`mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm ${passwordError ? "ring-1 ring-red-400" : ""}`}>
+              <div className={`mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm ${passwordError ? "ring-1 ring-red-400" : ""}`}>
                 <Lock size={18} className="text-gray-400 mr-3" />
                 <input
                   type="password"
@@ -223,7 +223,7 @@ export default function SignUp() {
 
             <div>
               <label className="text-sm font-medium">Confirm Password</label>
-              <div className={`mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm ${passwordError ? "ring-1 ring-red-400" : ""}`}>
+              <div className={`mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm ${passwordError ? "ring-1 ring-red-400" : ""}`}>
                 <Lock size={18} className="text-gray-400 mr-3" />
                 <input
                   type="password"
@@ -242,13 +242,13 @@ export default function SignUp() {
               <>
                 <div className="flex items-center gap-3 pt-2">
                   <div className="flex-1 h-px bg-[#f0e6e0]" />
-                  <span className="text-xs text-[#d97757] font-semibold uppercase tracking-widest">Vendor Info</span>
+                  <span className="text-xs text-accent font-semibold uppercase tracking-widest">Vendor Info</span>
                   <div className="flex-1 h-px bg-[#f0e6e0]" />
                 </div>
 
                 <div>
                   <label className="text-sm font-medium">Company Name</label>
-                  <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                  <div className="mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm">
                     <Building2 size={18} className="text-gray-400 mr-3" />
                     <input
                       type="text"
@@ -262,7 +262,7 @@ export default function SignUp() {
 
                 <div>
                   <label className="text-sm font-medium">Phone</label>
-                  <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                  <div className="mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm">
                     <Phone size={18} className="text-gray-400 mr-3" />
                     <input
                       type="tel"
@@ -276,7 +276,7 @@ export default function SignUp() {
 
                 <div>
                   <label className="text-sm font-medium">WhatsApp Link</label>
-                  <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                  <div className="mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm">
                     <MessageCircle size={18} className="text-gray-400 mr-3" />
                     <input
                       type="text"
@@ -290,7 +290,7 @@ export default function SignUp() {
 
                 <div>
                   <label className="text-sm font-medium">Location</label>
-                  <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                  <div className="mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm">
                     <MapPin size={18} className="text-gray-400 mr-3" />
                     <input
                       type="text"
@@ -304,7 +304,7 @@ export default function SignUp() {
 
                 <div>
                   <label className="text-sm font-medium">Bio</label>
-                  <div className="mt-2 flex items-start bg-white rounded-xl px-4 py-3 shadow-sm">
+                  <div className="mt-2 flex items-start bg-card rounded-xl px-4 py-3 shadow-sm">
                     <FileText size={18} className="text-gray-400 mr-3 mt-0.5" />
                     <textarea
                       rows={3}
@@ -321,7 +321,7 @@ export default function SignUp() {
                   <div className="mt-2">
                     <label className="flex flex-col items-center justify-center w-full cursor-pointer">
                       {logoUrl ? (
-                        <div className="relative w-full flex items-center justify-center bg-white rounded-xl px-4 py-3 shadow-sm">
+                        <div className="relative w-full flex items-center justify-center bg-card rounded-xl px-4 py-3 shadow-sm">
                           <img
                             src={logoUrl}
                             alt="Logo preview"
@@ -336,7 +336,7 @@ export default function SignUp() {
                           </button>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-3 w-full bg-white rounded-xl px-4 py-3 shadow-sm border-2 border-dashed border-gray-200 hover:border-[#d97757] transition">
+                        <div className="flex items-center gap-3 w-full bg-card rounded-xl px-4 py-3 shadow-sm border-2 border-dashed border-border hover:border-[#d97757] transition">
                           <Image size={18} className="text-gray-400" />
                           <span className="text-gray-400 text-sm">Click to upload logo</span>
                         </div>
@@ -375,9 +375,9 @@ export default function SignUp() {
             />
             <p className="leading-relaxed">
               I agree to the{" "}
-              <span className="text-[#d97757] font-semibold cursor-pointer">Terms of Service</span>
+              <span className="text-accent font-semibold cursor-pointer">Terms of Service</span>
               {" "}and{" "}
-              <span className="text-[#d97757] font-semibold cursor-pointer">Privacy Policy</span>
+              <span className="text-accent font-semibold cursor-pointer">Privacy Policy</span>
             </p>
           </div>
 
@@ -388,14 +388,14 @@ export default function SignUp() {
           <button
             onClick={handleSignUp}
             disabled={isSubmitting}
-            className="w-full mt-8 bg-[#d97757] text-white py-6 text-2xl rounded-full font-bold shadow-2xl hover:opacity-90 transition flex items-center justify-center disabled:opacity-60"
+            className="w-full mt-8 bg-accent text-white py-6 text-2xl rounded-full font-bold shadow-2xl hover:opacity-90 transition flex items-center justify-center disabled:opacity-60"
           >
             {isSubmitting ? "Creating Account..." : "Create Account"}
           </button>
 
           <p className="text-center mt-6 text-sm">
             Already have an account?{" "}
-            <a href="/login" className="text-[#d97757] font-medium">Sign In</a>
+            <a href="/login" className="text-accent font-medium">Sign In</a>
           </p>
 
         </div>

@@ -14,6 +14,10 @@ export default function Login() {
 
 const handleLogin = async () => {
   setError("")
+  if (!email || !password) {
+    setError("Please enter both email and password.")
+    return
+  }
   setIsSubmitting(true)
   try {
     const { data } = await loginUser({ email, password })
@@ -27,7 +31,7 @@ const handleLogin = async () => {
 }
 
   return (
-    <div className="min-h-screen flex bg-[#f5f1ec]">
+    <div className="min-h-screen flex bg-background">
 
       
       <div
@@ -50,7 +54,7 @@ const handleLogin = async () => {
         <div className="relative z-20 p-12 flex flex-col justify-between w-full">
 
           <a href="/" className="flex items-center gap-3 cursor-pointer">
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-card/20 flex items-center justify-center">
               ✦
             </div>
             <h1 className="text-xl font-semibold">CASA MOOD</h1>
@@ -77,11 +81,11 @@ const handleLogin = async () => {
 
         <div className="w-full max-w-md">
 
-          <h2 className="text-3xl font-bold text-gray-800">
+          <h2 className="text-3xl font-bold text-foreground">
             Sign In
           </h2>
 
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-muted-foreground">
             Enter your credentials to access your account
           </p>
 
@@ -91,8 +95,8 @@ const handleLogin = async () => {
               Email Address
             </label>
 
-            <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
-              <Mail size={18} className="text-gray-500 mr-3" />
+            <div className="mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm">
+              <Mail size={18} className="text-muted-foreground mr-3" />
               <input
                 type="email"
                 placeholder="designer@example.com"
@@ -109,8 +113,8 @@ const handleLogin = async () => {
               Password
             </label>
 
-            <div className="mt-2 flex items-center bg-white rounded-xl px-4 py-3 shadow-sm">
-              <Lock size={18} className="text-gray-500 mr-3" />
+            <div className="mt-2 flex items-center bg-card rounded-xl px-4 py-3 shadow-sm">
+              <Lock size={18} className="text-muted-foreground mr-3" />
               <input
                 type="password"
                 placeholder="Enter your password"
@@ -131,7 +135,7 @@ const handleLogin = async () => {
               Remember me
             </label>
 
-            <span className="text-[#c76f56] cursor-pointer">
+            <span className="text-gray-400 cursor-not-allowed" title="Not implemented">
               Forgot password?
             </span>
           </div>
@@ -149,6 +153,12 @@ const handleLogin = async () => {
             Sign In →
           </button>
 
+          <p className="text-center mt-6 text-sm text-muted-foreground">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-accent font-semibold hover:underline">
+              Sign Up
+            </Link>
+          </p>
         </div>
       </div>
     </div>

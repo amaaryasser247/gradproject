@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import Sidebar from "./Sidebar"
 import { getApiErrorMessage } from "./services/api"
 import { createProduct } from "./services/productService"
 
@@ -73,10 +72,10 @@ export default function AddProduct() {
     <div className="flex">
 
       
-      <Sidebar />
+      
 
       
-      <div className="ml-64 w-full bg-[#f5f1ec] min-h-screen p-8">
+      <div className=" w-full bg-background min-h-screen p-8">
 
         <h1 className="text-3xl font-bold mb-6 text-[#2f2f2f]">
           Add New Product
@@ -88,7 +87,7 @@ export default function AddProduct() {
           <div className="col-span-2 space-y-6">
 
             
-            <div className="bg-white p-6 rounded-2xl shadow-md border border-[#f0e6e0]">
+            <div className="bg-card p-6 rounded-2xl shadow-md border border-[#f0e6e0]">
               <h2 className="font-semibold mb-4">Basic Information</h2>
 
               <input
@@ -113,7 +112,7 @@ export default function AddProduct() {
             </div>
 
             
-            <div className="bg-white p-6 rounded-2xl shadow-md border">
+            <div className="bg-card p-6 rounded-2xl shadow-md border">
               <h2 className="font-semibold mb-4">Dimensions (cm)</h2>
 
               <div className="grid grid-cols-3 gap-4">
@@ -124,7 +123,7 @@ export default function AddProduct() {
             </div>
 
             
-            <div className="bg-white p-6 rounded-2xl shadow-md border">
+            <div className="bg-card p-6 rounded-2xl shadow-md border">
               <h2 className="font-semibold mb-4">Product Images</h2>
 
               <label className="w-40 h-40 border border-dashed border-[#d97757]/30 bg-[#fffaf7] flex items-center justify-center rounded-2xl cursor-pointer hover:bg-[#fff7f4] transition">
@@ -134,7 +133,7 @@ export default function AddProduct() {
             </div>
 
             
-            <div className="bg-white p-6 rounded-2xl shadow-md border">
+            <div className="bg-card p-6 rounded-2xl shadow-md border">
               <h2 className="font-semibold mb-4">Additional Details</h2>
 
               <div className="mb-4">
@@ -153,7 +152,7 @@ export default function AddProduct() {
           </div>
 
           
-          <div className="bg-white p-6 rounded-2xl shadow-md border h-fit">
+          <div className="bg-card p-6 rounded-2xl shadow-md border h-fit">
 
             <h2 className="font-semibold mb-4">Product Preview</h2>
 
@@ -165,9 +164,9 @@ export default function AddProduct() {
               )}
             </div>
 
-            <p className="text-sm text-gray-500">{form.category}</p>
+            <p className="text-sm text-muted-foreground">{form.category}</p>
             <h3 className="font-semibold">{form.name || "Product Name"}</h3>
-            <p className="text-[#d97757] font-bold">{form.price || 0} EGP</p>
+            <p className="text-accent font-bold">{form.price || 0} EGP</p>
 
             {error && (
               <p className="mt-3 text-sm text-red-500">{error}</p>
@@ -176,7 +175,7 @@ export default function AddProduct() {
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="w-full mt-4 py-3 rounded-xl text-white bg-[#d97757]"
+              className="w-full mt-4 py-3 rounded-xl text-white bg-accent"
             >
               {isSubmitting ? "Adding..." : "+ Add Product"}
             </button>

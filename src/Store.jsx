@@ -4,9 +4,9 @@ import { getAllProducts } from "./services/productService"
 import { getCategories } from "./services/categoryService"
 
 const BADGE_STYLES = {
-  Popular: "bg-[#d97757] text-white",
+  Popular: "bg-accent text-white",
   "Best Seller": "bg-[#5e6b5f] text-white",
-  New: "bg-[#e7cfc5] text-[#c76f56]",
+  New: "bg-accent/20 text-accent",
 }
 
 function StarRating({ rating }) {
@@ -14,13 +14,13 @@ function StarRating({ rating }) {
     <div className="flex items-center gap-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="w-4 h-4 text-[#d97757]"
+        className="w-4 h-4 text-accent"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
       </svg>
-      <span className="text-sm font-semibold text-gray-800">{rating}</span>
+      <span className="text-sm font-semibold text-foreground">{rating}</span>
     </div>
   )
 }
@@ -28,7 +28,7 @@ function StarRating({ rating }) {
 function ProductCard({ product }) {
   const navigate = useNavigate()
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group">
+    <div className="bg-card rounded-2xl overflow-hidden shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group">
       
       <div
   className="relative overflow-hidden h-52 cursor-pointer"
@@ -47,7 +47,7 @@ function ProductCard({ product }) {
           </span>
         )}
         
-        <span className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm text-gray-700 text-xs font-medium px-3 py-1 rounded-full">
+        <span className="absolute top-3 right-3 bg-card/80 backdrop-blur-sm text-foreground text-xs font-medium px-3 py-1 rounded-full">
           {product.category}
         </span>
       </div>
@@ -55,19 +55,19 @@ function ProductCard({ product }) {
       
       <div className="p-5">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold text-gray-800 leading-snug">{product.name}</h3>
-          <span className="shrink-0 bg-[#f1ebe6] text-[#c76f56] font-bold text-sm px-3 py-1 rounded-lg">
+          <h3 className="font-semibold text-foreground leading-snug">{product.name}</h3>
+          <span className="shrink-0 bg-muted text-accent font-bold text-sm px-3 py-1 rounded-lg">
             {product.price.toLocaleString()} EGP
           </span>
         </div>
 
         <div className="mt-3 flex items-center justify-between">
           <StarRating rating={product.rating} />
-          <span className="text-xs text-gray-500">({product.votes} votes)</span>
+          <span className="text-xs text-muted-foreground">({product.votes} votes)</span>
         </div>
 
         <button
-          className="mt-4 w-full py-2.5 rounded-xl text-sm font-semibold border-2 border-[#d97757] text-[#d97757] hover:bg-[#d97757] hover:text-white transition-all duration-200"
+          className="mt-4 w-full py-2.5 rounded-xl text-sm font-semibold border-2 border-[#d97757] text-accent hover:bg-accent hover:text-white transition-all duration-200"
         >
           Add to Cart
         </button>
@@ -118,31 +118,31 @@ export default function Store() {
     })
 
   return (
-    <div className="bg-[#f5f1ec] min-h-screen font-sans text-gray-800">
+    <div className="bg-background min-h-screen font-sans text-foreground">
 
       
-      <nav className="sticky top-0 z-50 bg-white shadow-sm">
+      <nav className="sticky top-0 z-50 bg-card shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#e7cfc5] rounded-full flex items-center justify-center text-[#c76f56] font-bold">
+            <div className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center text-accent font-bold">
               ✦
             </div>
             <h1 className="text-lg font-semibold tracking-wide">CASA MOOD</h1>
           </Link>
 
-          <ul className="hidden md:flex items-center gap-10 text-gray-600 font-medium">
+          <ul className="hidden md:flex items-center gap-10 text-muted-foreground font-medium">
             <li><Link to="/#features" className="hover:text-black transition">Features</Link></li>
             <li><Link to="/#how" className="hover:text-black transition">How It Works</Link></li>
-            <li><Link to="/vendor/store" className="text-[#d97757] font-semibold">Store</Link></li>
+            <li><Link to="/vendor/store" className="text-accent font-semibold">Store</Link></li>
             <li><Link to="/#vendors" className="hover:text-black transition">Vendors</Link></li>
             <li><Link to="/#testimonials" className="hover:text-black transition">Testimonials</Link></li>
           </ul>
 
           <div className="flex items-center gap-6">
-            <Link to="/login" className="text-gray-700 font-medium hover:text-black transition">Login</Link>
+            <Link to="/login" className="text-foreground font-medium hover:text-black transition">Login</Link>
             <Link
               to="/signup"
-              className="bg-[#d97757] text-white px-6 py-2 rounded-full shadow-md hover:opacity-90 transition"
+              className="bg-accent text-white px-6 py-2 rounded-full shadow-md hover:opacity-90 transition"
             >
               Get Started
             </Link>
@@ -155,7 +155,7 @@ export default function Store() {
         className="py-16 text-center"
         style={{ background: "linear-gradient(135deg,#c76f56,#5e6b5f)" }}
       >
-        <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm mb-4">
+        <div className="inline-flex items-center gap-2 bg-card/20 text-white px-4 py-2 rounded-full text-sm mb-4">
           ✦ Verified Egyptian Furniture Vendors
         </div>
         <h1 className="text-4xl md:text-5xl font-bold text-white">
@@ -185,14 +185,14 @@ export default function Store() {
               placeholder="Search products..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white rounded-xl shadow-sm border border-transparent focus:outline-none focus:ring-2 focus:ring-[#d97757]/40 text-gray-700"
+              className="w-full pl-11 pr-4 py-3 bg-card rounded-xl shadow-sm border border-transparent focus:outline-none focus:ring-2 focus:ring-[#d97757]/40 text-foreground"
             />
           </div>
 
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-5 py-3 bg-white rounded-xl shadow-sm border border-transparent focus:outline-none focus:ring-2 focus:ring-[#d97757]/40 text-gray-700 font-medium"
+            className="px-5 py-3 bg-card rounded-xl shadow-sm border border-transparent focus:outline-none focus:ring-2 focus:ring-[#d97757]/40 text-foreground font-medium"
           >
             <option value="default">Sort: Default</option>
             <option value="price-asc">Price: Low → High</option>
@@ -209,8 +209,8 @@ export default function Store() {
               onClick={() => setActiveCategory(cat)}
               className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                 activeCategory === cat
-                  ? "bg-[#d97757] text-white shadow-md"
-                  : "bg-white text-gray-600 hover:bg-[#e7cfc5] hover:text-[#c76f56]"
+                  ? "bg-accent text-white shadow-md"
+                  : "bg-card text-muted-foreground hover:bg-accent/20 hover:text-accent"
               }`}
             >
               {cat}
@@ -219,8 +219,8 @@ export default function Store() {
         </div>
 
         
-        <p className="text-sm text-gray-500 mb-6">
-          Showing <span className="font-semibold text-gray-800">{filtered.length}</span> products
+        <p className="text-sm text-muted-foreground mb-6">
+          Showing <span className="font-semibold text-foreground">{filtered.length}</span> products
         </p>
 
         
@@ -240,7 +240,7 @@ export default function Store() {
       </div>
 
       
-<div className="mt-20 py-8 text-center text-[#c76f56] text-sm border-t border-[#e7cfc5] bg-[#f1ebe6]">
+<div className="mt-20 py-8 text-center text-accent text-sm border-t border-[#e7cfc5] bg-muted">
         © 2026 CASA MOOD. All rights reserved.
       </div>
     </div>

@@ -60,25 +60,25 @@ export default function MyCatalogs() {
     <div className="space-y-8">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-sm font-semibold text-[#d97757]">Catalog Library</p>
-          <h1 className="text-3xl font-bold text-[#1C1410]">My Catalogs</h1>
-          <p className="mt-1 text-[#7A6A5F]">
+          <p className="text-sm font-semibold text-accent">Catalog Library</p>
+          <h1 className="text-3xl font-bold text-foreground">My Catalogs</h1>
+          <p className="mt-1 text-muted-foreground">
             Review generated catalogs, compare budgets, and reopen pricing.
           </p>
         </div>
 
         <button
           onClick={handleCreateCatalog}
-          className="flex w-fit items-center gap-2 rounded-full bg-[#d97757] px-5 py-3 font-semibold text-white shadow-sm transition hover:opacity-90"
+          className="flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-3 font-semibold text-white shadow-sm transition hover:opacity-90"
         >
           <Plus size={18} />
           Create Catalog
         </button>
       </div>
 
-      <div className="grid gap-4 rounded-2xl bg-white p-4 shadow-sm lg:grid-cols-[1fr_220px]">
+      <div className="grid gap-4 rounded-2xl bg-card p-4 shadow-sm lg:grid-cols-[1fr_220px]">
         <label className="flex items-center gap-3 rounded-2xl border bg-[#fffaf7] px-4 py-3">
-          <Search size={18} className="text-[#C1714A]" />
+          <Search size={18} className="text-accent" />
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -88,7 +88,7 @@ export default function MyCatalogs() {
         </label>
 
         <label className="flex items-center gap-3 rounded-2xl border bg-[#fffaf7] px-4 py-3">
-          <Filter size={18} className="text-[#C1714A]" />
+          <Filter size={18} className="text-accent" />
           <select
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
@@ -108,9 +108,9 @@ export default function MyCatalogs() {
       )}
 
       {filteredCatalogs.length === 0 ? (
-        <div className="rounded-2xl bg-white p-12 text-center shadow-sm">
-          <h2 className="text-xl font-semibold text-[#1C1410]">No catalogs found</h2>
-          <p className="mt-2 text-sm text-[#7A6A5F]">
+        <div className="rounded-2xl bg-card p-12 text-center shadow-sm">
+          <h2 className="text-xl font-semibold text-foreground">No catalogs found</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
             Try a different search term or budget filter.
           </p>
         </div>
@@ -123,7 +123,7 @@ export default function MyCatalogs() {
               <Link
                 key={catalog.id}
                 to={`/dashboard/catalog/${catalog.id}`}
-                className="group overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="group overflow-hidden rounded-2xl bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="grid gap-5 p-5 md:grid-cols-[180px_1fr]">
                   <div className="grid grid-cols-2 gap-2">
@@ -140,10 +140,10 @@ export default function MyCatalogs() {
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
-                        <h2 className="text-xl font-bold text-[#1C1410] group-hover:text-[#d97757]">
+                        <h2 className="text-xl font-bold text-foreground group-hover:text-accent">
                           {catalog.name}
                         </h2>
-                        <p className="mt-1 flex items-center gap-2 text-sm text-[#7A6A5F]">
+                        <p className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
                           <Calendar size={14} />
                           Created {new Date(catalog.createdAt).toLocaleDateString()}
                         </p>
@@ -172,10 +172,10 @@ export default function MyCatalogs() {
                           key={product.id}
                           className="flex items-center justify-between gap-3 text-sm"
                         >
-                          <span className="truncate text-[#1C1410]">
+                          <span className="truncate text-foreground">
                             {product.quantity}x {product.name}
                           </span>
-                          <span className="shrink-0 font-semibold text-[#C1714A]">
+                          <span className="shrink-0 font-semibold text-accent">
                             {formatCurrency(product.price * product.quantity)}
                           </span>
                         </div>
@@ -184,16 +184,16 @@ export default function MyCatalogs() {
 
                     <div className="mt-5 grid grid-cols-3 gap-3 rounded-2xl bg-[#fffaf7] p-4 text-sm">
                       <div>
-                        <p className="text-[#7A6A5F]">Products</p>
-                        <p className="font-bold text-[#1C1410]">{catalog.products.length}</p>
+                        <p className="text-muted-foreground">Products</p>
+                        <p className="font-bold text-foreground">{catalog.products.length}</p>
                       </div>
                       <div>
-                        <p className="text-[#7A6A5F]">Budget</p>
-                        <p className="font-bold text-[#1C1410]">{formatCurrency(catalog.budget)}</p>
+                        <p className="text-muted-foreground">Budget</p>
+                        <p className="font-bold text-foreground">{formatCurrency(catalog.budget)}</p>
                       </div>
                       <div>
-                        <p className="text-[#7A6A5F]">Total</p>
-                        <p className="font-bold text-[#C1714A]">{formatCurrency(totals.total)}</p>
+                        <p className="text-muted-foreground">Total</p>
+                        <p className="font-bold text-accent">{formatCurrency(totals.total)}</p>
                       </div>
                     </div>
                   </div>

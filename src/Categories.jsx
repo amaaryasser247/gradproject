@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
 import {
   Sofa,
   Armchair,
@@ -125,19 +124,17 @@ export default function Categories() {
     <div className="flex">
 
       
-      <div className="w-64 fixed h-full">
-        <Sidebar />
-      </div>
+      
 
       
-      <div className="ml-64 w-full min-h-screen bg-[#F5F0EB] py-10 px-10">
+      <div className=" w-full min-h-screen bg-background py-10 px-10">
 
         
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-[#1C1410]">
+          <h1 className="text-2xl font-bold text-foreground">
             Product Categories
           </h1>
-          <p className="text-sm text-[#7A6A5F] mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Organize and manage your product categories
           </p>
           {error && (
@@ -146,10 +143,10 @@ export default function Categories() {
         </div>
 
         
-        <div className="bg-white rounded-2xl px-8 py-7 flex justify-between items-center border shadow-sm mb-10">
+        <div className="bg-card rounded-2xl px-8 py-7 flex justify-between items-center border shadow-sm mb-10">
           <div>
             <h2 className="font-bold mb-1">Category Management</h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Add or manage categories
             </p>
           </div>
@@ -159,7 +156,7 @@ export default function Categories() {
               setNewCategory("");
               setShowModal(true);
             }}
-            className="bg-[#C1714A] text-white px-6 py-3 rounded-lg hover:bg-[#a15f3e] transition"
+            className="bg-accent text-white px-6 py-3 rounded-lg hover:bg-[#a15f3e] transition"
           >
             + Add Category
           </button>
@@ -175,7 +172,7 @@ export default function Categories() {
                 key={`${cat.id}-${index}`}
                 onMouseEnter={() => setHovered(cat.id)}
                 onMouseLeave={() => setHovered(null)}
-                className={`bg-white rounded-2xl p-6 border border-[#C1714A1A] transition ${
+                className={`bg-card rounded-2xl p-6 border border-[#C1714A1A] transition ${
                   hovered === cat.id
                     ? "shadow-xl -translate-y-1"
                     : "shadow-sm"
@@ -187,7 +184,7 @@ export default function Categories() {
                 
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#F3E8E2]">
-                    {Icon && <Icon className="text-[#C1714A]" size={22} />}
+                    {Icon && <Icon className="text-accent" size={22} />}
                   </div>
                   
                   {hovered === cat.id && (
@@ -204,7 +201,7 @@ export default function Categories() {
                 
                 <h3 className="font-bold text-lg mb-2">{cat.name}</h3>
 
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   {cat.products} products
                 </p>
 
@@ -226,7 +223,7 @@ export default function Categories() {
           onClick={() => setShowModal(false)}
         >
           <div
-            className="bg-white p-8 rounded-2xl w-[400px]"
+            className="bg-card p-8 rounded-2xl w-[400px]"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-xl font-bold mb-4">Add New Category</h2>
@@ -243,13 +240,13 @@ export default function Categories() {
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowModal(false)}
-                className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+                className="bg-gray-100 text-muted-foreground px-4 py-2 rounded-lg hover:bg-gray-200 transition"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAdd}
-                className="bg-[#C1714A] text-white px-6 py-2 rounded-lg hover:bg-[#a15f3e] transition"
+                className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-[#a15f3e] transition"
               >
                 Add
               </button>

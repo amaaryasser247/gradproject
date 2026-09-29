@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import Sidebar from "./Sidebar"
 import { getApiErrorMessage } from "./services/api"
 import { updateProduct } from "./services/productService"
 
@@ -17,6 +16,7 @@ export default function EditProduct() {
   const [size, setSize] = useState(product?.size || "")
   const [stock, setStock] = useState(product?.stock || "")
   const [image, setImage] = useState(product?.image || "")
+  const [imageFile, setImageFile] = useState(null)
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -26,7 +26,7 @@ export default function EditProduct() {
         <h2 className="text-xl font-semibold mb-4">No product data</h2>
         <button
           onClick={() => navigate("/vendor/products")}
-          className="bg-[#d97757] text-white px-6 py-2 rounded-full"
+          className="bg-accent text-white px-6 py-2 rounded-full"
         >
           Go Back
         </button>
@@ -37,18 +37,34 @@ export default function EditProduct() {
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     if (file) {
+      setImageFile(file)
       const preview = URL.createObjectURL(file)
       setImage(preview)
     }
   }
 
   const handleSave = async () => {
-    const updatedProduct = { ...product, name, price, category, size, stock, image }
     setError("")
     setIsSubmitting(true)
 
+    const formData = new FormData()
+    formData.append("Name", name)
+    formData.append("Price", Number(price) || 0)
+    formData.append("Stock", Number(stock) || 0)
+    
+    // Fallbacks or other fields can go here based on API
+    // If the category is needed as an ID, you might have to map it like in AddProduct
+    const categoryMap = { "Seating": 1, "Tables": 2, "Lighting": 3, "Decor": 4 }
+    if (category) formData.append("CategoryId", categoryMap[category] || 1)
+    
+    if (size) formData.append("Dimensions", size)
+    
+    if (imageFile) {
+      formData.append("Image", imageFile)
+    }
+
     try {
-      await updateProduct(product.id, updatedProduct)
+      await updateProduct(product.id, formData)
       navigate("/vendor/products")
     } catch (error) {
       setError(getApiErrorMessage(error, "Unable to update product. Please try again."))
@@ -60,16 +76,14 @@ export default function EditProduct() {
   return (
     <div className="flex">
 
-      <div className="w-64 fixed h-full">
-        <Sidebar />
-      </div>
+      
 
-      <div className="ml-64 w-full bg-[#f5f1ec] min-h-screen p-10">
+      <div className=" w-full bg-background min-h-screen p-10">
 
         
         <button
           onClick={() => navigate("/vendor/products")}
-          className="flex items-center gap-2 text-[#d97757] mb-8 hover:opacity-75 transition group"
+          className="flex items-center gap-2 text-accent mb-8 hover:opacity-75 transition group"
         >
           <svg
             className="w-4 h-4 group-hover:-translate-x-1 transition-transform"
@@ -80,7 +94,7 @@ export default function EditProduct() {
           <span className="text-sm font-semibold tracking-wide uppercase">Back to Products</span>
         </button>
 
-        <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow p-10">
+        <div className="max-w-6xl mx-auto bg-card rounded-2xl shadow p-10">
 
           <h2 className="text-2xl font-bold mb-6 text-[#2f2f2f]">Edit Product</h2>
 
@@ -106,7 +120,7 @@ export default function EditProduct() {
             <div className="space-y-5">
 
               <div>
-                <label className="text-sm text-gray-500">Product Name</label>
+                <label className="text-sm text-muted-foreground">Product Name</label>
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -115,7 +129,7 @@ export default function EditProduct() {
               </div>
 
               <div>
-                <label className="text-sm text-gray-500">Price</label>
+                <label className="text-sm text-muted-foreground">Price</label>
                 <input
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
@@ -124,7 +138,7 @@ export default function EditProduct() {
               </div>
 
               <div>
-                <label className="text-sm text-gray-500">Category</label>
+                <label className="text-sm text-muted-foreground">Category</label>
                 <input
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
@@ -133,7 +147,7 @@ export default function EditProduct() {
               </div>
 
               <div>
-                <label className="text-sm text-gray-500">Size</label>
+                <label className="text-sm text-muted-foreground">Size</label>
                 <input
                   value={size}
                   onChange={(e) => setSize(e.target.value)}
@@ -142,7 +156,7 @@ export default function EditProduct() {
               </div>
 
               <div>
-                <label className="text-sm text-gray-500">Stock</label>
+                <label className="text-sm text-muted-foreground">Stock</label>
                 <input
                   value={stock}
                   onChange={(e) => setStock(e.target.value)}
@@ -166,7 +180,7 @@ export default function EditProduct() {
             <button
               onClick={handleSave}
               disabled={isSubmitting}
-              className="bg-[#d97757] text-white px-8 py-3 rounded-full shadow hover:opacity-90"
+              className="bg-accent text-white px-8 py-3 rounded-full shadow hover:opacity-90"
             >
               {isSubmitting ? "Saving..." : "Save Changes"}
             </button>

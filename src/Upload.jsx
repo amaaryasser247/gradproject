@@ -82,17 +82,17 @@ export default function Upload() {
   // ------------------------------------------
 
   return (
-    <div className="min-h-screen flex bg-[#f5f1ec]">
+    <div className="min-h-screen flex bg-background">
       
       <div className="max-w-6xl mx-auto space-y-10">
 
-        <div className="bg-white rounded-2xl p-10 shadow">
+        <div className="bg-card rounded-2xl p-10 shadow">
 
           <h2 className="text-xl font-semibold mb-2">
             Design Image
           </h2>
 
-          <p className="text-gray-500 mb-6">
+          <p className="text-muted-foreground mb-6">
             Upload a high-quality 2D design image (PNG, JPG)
           </p>
 
@@ -101,7 +101,7 @@ export default function Upload() {
             <div className="mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-12 h-12 text-[#d97757]"
+                className="w-12 h-12 text-accent"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -111,8 +111,8 @@ export default function Upload() {
               </svg>
             </div>
 
-            <p className="text-gray-700">
-              Drop your design here, or <span className="text-[#d97757]">browse</span>
+            <p className="text-foreground">
+              Drop your design here, or <span className="text-accent">browse</span>
             </p>
 
             <p className="text-sm text-gray-400 mt-2">
@@ -136,7 +136,7 @@ export default function Upload() {
 
         </div>
 
-        <div className="bg-white rounded-2xl p-10 shadow space-y-8">
+        <div className="bg-card rounded-2xl p-10 shadow space-y-8">
 
           <input
             type="text"
@@ -147,7 +147,7 @@ export default function Upload() {
           />
 
           <div>
-            <p className="text-gray-700 mb-4">Room Type</p>
+            <p className="text-foreground mb-4">Room Type</p>
 
             <div className="flex gap-4 flex-wrap">
               {rooms.map((r)=>(
@@ -156,8 +156,8 @@ export default function Upload() {
                   onClick={()=>setRoom(r)}
                   className={`px-10 py-4 rounded-full border transition
                   ${room===r
-                    ? "border-[#d97757] text-[#d97757] bg-[#fff7f4]"
-                    : "border-gray-300 text-gray-700"
+                    ? "border-[#d97757] text-accent bg-[#fff7f4]"
+                    : "border-gray-300 text-foreground"
                   }`}
                 >
                   {r}
@@ -168,9 +168,9 @@ export default function Upload() {
 
           <div className="grid gap-4 lg:grid-cols-[1fr_220px] lg:items-end">
             <label>
-              <span className="block text-gray-700 mb-3">Available Budget</span>
+              <span className="block text-foreground mb-3">Available Budget</span>
               <div className="flex items-center gap-3 rounded-2xl border bg-[#fffaf7] px-5 py-4">
-                <span className="font-semibold text-[#d97757]">EGP</span>
+                <span className="font-semibold text-accent">EGP</span>
                 <input
                   type="number"
                   min="0"
@@ -182,9 +182,9 @@ export default function Upload() {
               </div>
             </label>
 
-            <div className="rounded-2xl bg-[#f1ebe6] px-5 py-4">
-              <p className="text-xs text-gray-500">Current Budget</p>
-              <p className="text-xl font-bold text-[#d97757]">
+            <div className="rounded-2xl bg-muted px-5 py-4">
+              <p className="text-xs text-muted-foreground">Current Budget</p>
+              <p className="text-xl font-bold text-accent">
                 {(Number(budget) || 0).toLocaleString()} EGP
               </p>
             </div>
@@ -192,14 +192,14 @@ export default function Upload() {
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             {message && (
-              <p className="rounded-2xl bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
+              <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
                 {message}
               </p>
             )}
 
             <button
               onClick={handleCreateProject}
-              className="w-full rounded-full bg-[#d97757] px-6 py-3 font-semibold text-white shadow-sm transition hover:opacity-90 sm:ml-auto sm:w-fit"
+              className="w-full rounded-full bg-accent px-6 py-3 font-semibold text-white shadow-sm transition hover:opacity-90 sm:ml-auto sm:w-fit"
             >
               Create Project
             </button>
@@ -221,35 +221,35 @@ export default function Upload() {
 
           <div className="grid md:grid-cols-3 gap-6 mt-10">
 
-            <div className="bg-white rounded-2xl p-6 shadow flex gap-4 items-start">
-              <div className="w-12 h-12 rounded-full bg-[#f3e4df] flex items-center justify-center text-[#d97757] text-xl">
+            <div className="bg-card rounded-2xl p-6 shadow flex gap-4 items-start">
+              <div className="w-12 h-12 rounded-full bg-[#f3e4df] flex items-center justify-center text-accent text-xl">
                 ✦
               </div>
               <div>
                 <h3 className="font-semibold">AI Detection</h3>
-                <p className="text-gray-500 text-sm">
+                <p className="text-muted-foreground text-sm">
                   Automatically identifies all furniture items
                 </p>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow flex gap-4 items-start">
+            <div className="bg-card rounded-2xl p-6 shadow flex gap-4 items-start">
               <div className="w-12 h-12 rounded-full bg-[#e9efe9] flex items-center justify-center text-[#5e6b5f] text-xl">
                 $
               </div>
               <div>
                 <h3 className="font-semibold">Real Pricing</h3>
-                <p className="text-gray-500 text-sm">
+                <p className="text-muted-foreground text-sm">
                   Get accurate prices from Egyptian vendors
                 </p>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow flex gap-4 items-start">
+            <div className="bg-card rounded-2xl p-6 shadow flex gap-4 items-start">
               <div className="w-12 h-12 rounded-full bg-[#f3e4df] flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 text-[#d97757]"
+                  className="w-6 h-6 text-accent"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -264,7 +264,7 @@ export default function Upload() {
               </div>
               <div>
                 <h3 className="font-semibold">Instant Results</h3>
-                <p className="text-gray-500 text-sm">
+                <p className="text-muted-foreground text-sm">
                   Complete analysis in under 30 seconds
                 </p>
               </div>

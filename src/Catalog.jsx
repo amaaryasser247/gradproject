@@ -43,7 +43,6 @@ export default function Catalog() {
         const proposalRes = await api.get(`/Proposals/${id}`);
         
         const data = proposalRes.data;
-        console.log("=== PROPOSAL API RESPONSE ===", JSON.stringify(data, null, 2));
         setCatalogName(data.name || "Interior Proposal")
         setRoomType(data.roomType || "Living Room")
         const pId = data.projectId || id
@@ -66,7 +65,6 @@ export default function Catalog() {
         }
         setBudget(budgetNum)
 
-        console.log("TOTALS FROM API:", { subtotal, vat, fees, total, budgetNum })
         setTotals({
           subtotal,
           tax: vat,
@@ -77,7 +75,6 @@ export default function Catalog() {
         })
         
         const rawItems = data.propertyItems || data.items || data.selectedProducts || data.products || []
-        console.log("=== RAW ITEMS ===", JSON.stringify(rawItems, null, 2));
         
         if (!Array.isArray(rawItems) || rawItems.length === 0) {
           setProducts([])
@@ -114,8 +111,6 @@ export default function Catalog() {
             p.vendor || p.Vendor ||
             pInfo.vendor || pInfo.brand || "Vendor";
 
-          console.log(`Item[${index}]:`, { name: resolvedName, price: resolvedPrice, vendor: resolvedVendor });
-
           return {
             ...pInfo,
             id: itemId || `item-${index}`,
@@ -134,7 +129,6 @@ export default function Catalog() {
           }
         }).sort((a, b) => b.matchScore - a.matchScore);
 
-        console.log("=== PROCESSED ===", processed.map(p => ({ name: p.name, price: p.price, vendor: p.vendor })));
         setProducts(processed)
       } catch (err) {
         console.error(err)
@@ -260,7 +254,7 @@ export default function Catalog() {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center space-y-4">
         <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#e7cfc5] border-t-[#d97757]"></div>
-        <p className="font-semibold text-[#7A6A5F]">Loading Proposal Details...</p>
+        <p className="font-semibold text-muted-foreground">Loading Proposal Details...</p>
       </div>
     )
   }
@@ -269,13 +263,13 @@ export default function Catalog() {
     <div className="catalog-print-area space-y-8">
       <div className="no-print flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-sm font-semibold text-[#d97757]">Professional Catalog</p>
+          <p className="text-sm font-semibold text-accent">Professional Catalog</p>
           <input
             value={catalogName}
             onChange={(event) => setCatalogName(event.target.value)}
-            className="mt-1 w-full rounded-2xl border bg-white px-4 py-3 text-3xl font-bold text-[#1C1410] lg:min-w-120"
+            className="mt-1 w-full rounded-2xl border bg-card px-4 py-3 text-3xl font-bold text-foreground lg:min-w-120"
           />
-          <p className="mt-2 text-[#7A6A5F]">
+          <p className="mt-2 text-muted-foreground">
             {roomType} | Project #{projectId || id}
           </p>
         </div>
@@ -296,7 +290,7 @@ export default function Catalog() {
           <button onClick={() => printCatalog("print")} className="flex items-center gap-2 rounded-full border px-4 py-2 font-semibold">
             <Printer size={16} /> Print
           </button>
-          <button onClick={() => printCatalog("pdf")} className="flex items-center gap-2 rounded-full bg-[#d97757] px-5 py-2 font-semibold text-white shadow-sm">
+          <button onClick={() => printCatalog("pdf")} className="flex items-center gap-2 rounded-full bg-accent px-5 py-2 font-semibold text-white shadow-sm">
             <FileText size={16} /> Export PDF
           </button>
         </div>
@@ -313,12 +307,12 @@ export default function Catalog() {
       )}
 
       <section className="grid gap-6 xl:grid-cols-[1fr_360px]">
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
+        <div className="rounded-2xl bg-card p-6 shadow-sm">
           <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-[#1C1410]">CASA MOOD</h2>
-              <p className="text-[#7A6A5F]">Interior Design Catalog</p>
-              <div className="mt-6 grid gap-2 text-sm text-[#1C1410] sm:grid-cols-2">
+              <h2 className="text-3xl font-bold text-foreground">CASA MOOD</h2>
+              <p className="text-muted-foreground">Interior Design Catalog</p>
+              <div className="mt-6 grid gap-2 text-sm text-foreground sm:grid-cols-2">
                 <p><span className="font-semibold">Room:</span> {roomType}</p>
                 <p><span className="font-semibold">Style:</span> Modern</p>
                 <p><span className="font-semibold">Created:</span> {new Date(catalog.createdAt).toLocaleDateString()}</p>
@@ -327,9 +321,9 @@ export default function Catalog() {
             </div>
 
             <div className="rounded-2xl bg-[#fffaf7] p-5 md:w-80">
-              <label className="text-sm font-semibold text-[#7A6A5F]">Available Budget</label>
-              <div className="mt-2 flex items-center gap-2 rounded-2xl border bg-white px-4 py-3">
-                <span className="font-semibold text-[#C1714A]">EGP</span>
+              <label className="text-sm font-semibold text-muted-foreground">Available Budget</label>
+              <div className="mt-2 flex items-center gap-2 rounded-2xl border bg-card px-4 py-3">
+                <span className="font-semibold text-accent">EGP</span>
                 <input
                   type="number"
                   min="0"
@@ -354,11 +348,11 @@ export default function Catalog() {
         <PricingSummary totals={totals} budget={budget} productCount={products.length} />
       </section>
 
-      <section className="rounded-2xl bg-white p-6 shadow-sm">
+      <section className="rounded-2xl bg-card p-6 shadow-sm">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-[#1C1410]">Selected Products</h2>
-            <p className="text-sm text-[#7A6A5F]">
+            <h2 className="text-2xl font-bold text-foreground">Selected Products</h2>
+            <p className="text-sm text-muted-foreground">
               Quantity changes update totals, fees, and budget instantly.
             </p>
           </div>
@@ -366,10 +360,10 @@ export default function Catalog() {
 
         <div className="mt-6 grid gap-5 lg:grid-cols-2">
           {products.map((product) => (
-            <article key={product.id} className="overflow-hidden rounded-2xl border bg-white shadow-sm">
+            <article key={product.id} className="overflow-hidden rounded-2xl border bg-card shadow-sm">
               <div className="relative">
                 <img src={product.image} alt={product.name} className="h-64 w-full object-cover" />
-                <label className="no-print absolute bottom-4 right-4 flex cursor-pointer items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-[#C1714A] shadow-sm transition hover:bg-[#fff7f4]">
+                <label className="no-print absolute bottom-4 right-4 flex cursor-pointer items-center gap-2 rounded-full bg-card/95 px-4 py-2 text-sm font-semibold text-accent shadow-sm transition hover:bg-[#fff7f4]">
                   <Camera size={16} />
                   Change Image
                   <input
@@ -383,7 +377,7 @@ export default function Catalog() {
               <div className="space-y-4 p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-[#d97757]">
+                    <p className="text-sm font-semibold text-accent">
                       {product?.category || "Product"}
                       {product?.matchScore > 0 && (
                         <span className="ml-2 bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[10px]">
@@ -391,11 +385,11 @@ export default function Catalog() {
                         </span>
                       )}
                     </p>
-                    <h3 className="text-lg font-bold text-[#1C1410]">{product?.name}</h3>
+                    <h3 className="text-lg font-bold text-foreground">{product?.name}</h3>
                     {product?.matchedName && (
                       <p className="text-xs text-blue-600 font-medium italic">Matched: {product.matchedName}</p>
                     )}
-                    <p className="text-sm text-[#7A6A5F]">by {product?.vendor || "Vendor"}</p>
+                    <p className="text-sm text-muted-foreground">by {product?.vendor || "Vendor"}</p>
                   </div>
                   <button
                     onClick={() => removeProduct(product.id)}
@@ -406,33 +400,33 @@ export default function Catalog() {
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-y-2 text-sm text-[#7A6A5F]">
+                <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground">
                   <span>SKU</span>
-                  <span className="text-right text-[#1C1410]">{product?.sku || "N/A"}</span>
+                  <span className="text-right text-foreground">{product?.sku || "N/A"}</span>
                   <span>Material</span>
-                  <span className="text-right text-[#1C1410]">{product?.material || "N/A"}</span>
+                  <span className="text-right text-foreground">{product?.material || "N/A"}</span>
                   <span>Dimensions</span>
-                  <span className="text-right text-[#1C1410]">{product?.dimensions || "N/A"}</span>
+                  <span className="text-right text-foreground">{product?.dimensions || "N/A"}</span>
                 </div>
 
                 <div className="grid gap-3 rounded-2xl bg-[#fffaf7] p-4 sm:grid-cols-3">
                   <div>
-                    <p className="text-xs text-[#7A6A5F]">Est. Price</p>
-                    <p className="font-bold text-[#C1714A]">{formatCurrency(product?.price)}</p>
+                    <p className="text-xs text-muted-foreground">Est. Price</p>
+                    <p className="font-bold text-accent">{formatCurrency(product?.price)}</p>
                   </div>
                   <label>
-                    <span className="text-xs text-[#7A6A5F]">Quantity ({product?.unit || "unit"})</span>
+                    <span className="text-xs text-muted-foreground">Quantity ({product?.unit || "unit"})</span>
                     <input
                       type="number"
                       min="1"
                       value={product?.quantity}
                       onChange={(event) => updateQuantity(product.id, event.target.value)}
-                      className="mt-1 w-full rounded-xl border bg-white px-3 py-2 font-semibold outline-none focus:border-[#C1714A]"
+                      className="mt-1 w-full rounded-xl border bg-card px-3 py-2 font-semibold outline-none focus:border-[#C1714A]"
                     />
                   </label>
                   <div>
-                    <p className="text-xs text-[#7A6A5F]">Line total</p>
-                    <p className="font-bold text-[#1C1410]">
+                    <p className="text-xs text-muted-foreground">Line total</p>
+                    <p className="font-bold text-foreground">
                       {formatCurrency(product.price * product.quantity)}
                     </p>
                   </div>
@@ -444,14 +438,14 @@ export default function Catalog() {
       </section>
 
       <section className="no-print">
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-bold text-[#1C1410]">Send Catalog to Email</h2>
-          <p className="mt-1 text-sm text-[#7A6A5F]">
+        <div className="rounded-2xl bg-card p-6 shadow-sm">
+          <h2 className="text-xl font-bold text-foreground">Send Catalog to Email</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
             Opens a ready-to-send email with the catalog preview, pricing summary, and share link.
           </p>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row">
             <label className="flex flex-1 items-center gap-3 rounded-2xl border bg-[#fffaf7] px-4 py-3">
-              <Mail size={18} className="text-[#C1714A]" />
+              <Mail size={18} className="text-accent" />
               <input
                 ref={emailInputRef}
                 value={email}
@@ -463,7 +457,7 @@ export default function Catalog() {
             <button
               onClick={handleEmail}
               disabled={isLoading}
-              className="flex items-center justify-center gap-2 rounded-2xl bg-[#d97757] px-5 py-3 font-semibold text-white disabled:opacity-60"
+              className="flex items-center justify-center gap-2 rounded-2xl bg-accent px-5 py-3 font-semibold text-white disabled:opacity-60"
             >
               <Send size={18} /> {isLoading ? "Preparing..." : "Send to Email"}
             </button>
@@ -476,8 +470,8 @@ export default function Catalog() {
 
 function PricingSummary({ totals, budget, productCount }) {
   return (
-    <aside className="rounded-2xl bg-white p-6 shadow-sm">
-      <h2 className="text-xl font-bold text-[#1C1410]">Dynamic Pricing</h2>
+    <aside className="rounded-2xl bg-card p-6 shadow-sm">
+      <h2 className="text-xl font-bold text-foreground">Dynamic Pricing</h2>
       <div className="mt-5 space-y-3 text-sm">
         <SummaryRow label={`Subtotal (${productCount} products)`} value={formatCurrency(totals.subtotal)} />
         <SummaryRow label="VAT (14%)" value={formatCurrency(totals.tax)} />
@@ -501,7 +495,7 @@ function PricingSummary({ totals, budget, productCount }) {
 
 function SummaryRow({ label, value, strong = false }) {
   return (
-    <div className={`flex items-center justify-between gap-4 ${strong ? "text-lg font-bold text-[#C1714A]" : ""}`}>
+    <div className={`flex items-center justify-between gap-4 ${strong ? "text-lg font-bold text-accent" : ""}`}>
       <span>{label}</span>
       <span>{value}</span>
     </div>

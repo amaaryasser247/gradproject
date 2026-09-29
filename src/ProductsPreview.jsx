@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import Sidebar from "./Sidebar"
 
 export default function ProductPreview() {
   const { state: product } = useLocation()
@@ -9,7 +8,7 @@ export default function ProductPreview() {
 
   if (!product) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#f5f1ec]">
+      <div className="flex items-center justify-center h-screen bg-background">
         <p className="text-gray-400 text-lg">No product selected.</p>
       </div>
     )
@@ -35,17 +34,15 @@ export default function ProductPreview() {
     <div className="flex">
 
       
-      <div className="w-64 fixed h-full">
-        <Sidebar />
-      </div>
+      
 
       
-      <div className="ml-64 w-full bg-[#f5f1ec] min-h-screen p-8">
+      <div className=" w-full bg-background min-h-screen p-8">
 
         
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-[#d97757] mb-8 hover:opacity-75 transition group"
+          className="flex items-center gap-2 text-accent mb-8 hover:opacity-75 transition group"
         >
           <svg
             className="w-4 h-4 group-hover:-translate-x-1 transition-transform"
@@ -57,7 +54,7 @@ export default function ProductPreview() {
         </button>
 
         
-        <div className="bg-white rounded-3xl shadow-sm border border-[#eee] overflow-hidden">
+        <div className="bg-card rounded-3xl shadow-sm border border-[#eee] overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2">
 
             
@@ -91,7 +88,7 @@ export default function ProductPreview() {
 
               
               <div>
-                <span className="inline-block bg-[#f7e8e2] text-[#d97757] px-3 py-1 rounded-full text-xs font-semibold mb-4">
+                <span className="inline-block bg-[#f7e8e2] text-accent px-3 py-1 rounded-full text-xs font-semibold mb-4">
                   {product.category}
                 </span>
 
@@ -99,7 +96,7 @@ export default function ProductPreview() {
                   {product.name}
                 </h1>
 
-                <p className="text-[#d97757] text-3xl font-bold mt-4 mb-8">
+                <p className="text-accent text-3xl font-bold mt-4 mb-8">
                   {product.price}
                 </p>
 
@@ -121,7 +118,7 @@ export default function ProductPreview() {
               <div className="flex gap-3 mt-10">
                 <button
                   onClick={() => navigate("/vendor/edit-product", { state: product })}
-                  className="flex items-center gap-2 bg-[#d97757] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#c9673f] hover:scale-105 transition-all shadow"
+                  className="flex items-center gap-2 bg-accent text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#c9673f] hover:scale-105 transition-all shadow"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M12 20h9" />
