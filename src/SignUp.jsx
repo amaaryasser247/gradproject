@@ -44,6 +44,11 @@ export default function SignUp() {
       setPasswordError("Password must be at least 6 characters")
       return
     }
+    // Backend (ASP.NET Identity) requires upper, lower, digit and a symbol
+    if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+      setPasswordError("Password must include an uppercase letter, a lowercase letter, a number and a symbol (e.g. Casa@2026)")
+      return
+    }
     setPasswordError("")
 
     if (role === "vendor" && !logoFile) {
