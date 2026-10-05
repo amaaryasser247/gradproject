@@ -106,7 +106,12 @@ export default function SignUp() {
         navigate("/")
       }
     } catch (error) {
-      setSubmitError(getApiErrorMessage(error, "Unable to create account. Please try again."))
+      // Backend returns an empty 500 when the email already exists
+      if (error?.response?.status === 500) {
+        setSubmitError("This email may already be registered. Try signing in instead.")
+      } else {
+        setSubmitError(getApiErrorMessage(error, "Unable to create account. Please try again."))
+      }
     } finally {
       setIsSubmitting(false)
     }

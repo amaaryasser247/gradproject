@@ -24,7 +24,12 @@ const handleLogin = async () => {
     const role = data?.role?.toLowerCase()
     navigate(role === "vendor" ? "/vendor/products" : "/", { replace: true })
   } catch (error) {
-    setError(getApiErrorMessage(error, "Unable to sign in. Please check your credentials."))
+    // Backend returns an empty 500 for wrong email/password
+    if (error?.response?.status === 500 || error?.response?.status === 400) {
+      setError("Incorrect email or password.")
+    } else {
+      setError(getApiErrorMessage(error, "Unable to sign in. Please check your credentials."))
+    }
   } finally {
     setIsSubmitting(false)
   }
